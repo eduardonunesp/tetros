@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <SDL2/SDL.h>
+#include "pieces.h"
 
 #ifdef _DEBUG
 #define LOG(msg) printf(msg);
@@ -17,149 +18,49 @@
 
 #define LINES_WIDTH 10
 #define LINES_HEIGHT 20
-
 #define SCREEN_WIDTH 480
 #define SCREEN_HEIGHT 640
-
 #define GRID_X_OFFSET 116
 #define GRID_Y_OFFSET 60
-
 #define PIECE_AREA 4
 #define PIECE_VARS 4
-
 #define CELL_SIZE 24
-
 #define LINE_OFFSET 1
-
-#define TST 0
-#define TET 1
-#define TSW 2
-#define TSQ 3
-#define TEL 4
-
-// straight tetromino
-#define TST0 {  \
-	{0, 1, 0, 0}, \
-	{0, 1, 0, 0}, \
-	{0, 1, 0, 0}, \
-	{0, 1, 0, 0}, \
-}
-
-#define TST1 {  \
-	{0, 0, 0, 0}, \
-	{1, 1, 1, 1}, \
-	{0, 0, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-// T-tetromino
-#define TET0 {  \
-	{0, 2, 0, 0}, \
-	{2, 2, 2, 0}, \
-	{0, 0, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-#define TET1 {  \
-	{0, 2, 0, 0}, \
-	{0, 2, 2, 0}, \
-	{0, 2, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-#define TET2 {  \
-	{0, 0, 0, 0}, \
-	{2, 2, 2, 0}, \
-	{0, 2, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-#define TET3 {  \
-	{0, 2, 0, 0}, \
-	{2, 2, 0, 0}, \
-	{0, 2, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-// skew tetromino
-#define TSW0 {  \
-	{0, 3, 3, 0}, \
-	{0, 0, 3, 3}, \
-	{0, 0, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-// skew tetromino
-#define TSW1 {  \
-	{0, 0, 3, 0}, \
-	{0, 3, 3, 0}, \
-	{0, 3, 0, 0}, \
-	{0, 0, 0, 0}, \
-}
-
-// square tetromino
-#define TSQ0 {  \
-	{0, 4, 4, 0}, \
-	{0, 4, 4, 0}, \
-	{0, 0, 0, 0}, \
-	{0, 0, 0, 0}, \
-};
-
-// L-tetromino
-#define TEL0 {   \
-	{0, 5, 0, 0}, \
-	{0, 5, 0, 0}, \
-	{0, 5, 5, 0}, \
-	{0, 0, 0, 0}, \
-};
-
-#define TEL1 {   \
-	{0, 0, 0, 0}, \
-	{0, 5, 5, 5}, \
-	{0, 5, 0, 0}, \
-	{0, 0, 0, 0}, \
-};
-
-#define TEL2 {   \
-	{5, 5, 0, 0}, \
-	{0, 5, 0, 0}, \
-	{0, 5, 0, 0}, \
-	{0, 0, 0, 0}, \
-};
-
-#define TEL3 {   \
-	{0, 0, 5, 0}, \
-	{5, 5, 5, 0}, \
-	{0, 0, 0, 0}, \
-	{0, 0, 0, 0}, \
-};
+#define SPEED 200
+#define MOVE_RIGHT 1
+#define MOVE_LEFT -1
 
 bool running = true;
 bool dead = false;
+bool can_rotate = true;
 
 int grid[LINES_HEIGHT][LINES_WIDTH] = {
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{0, 0, 0, 0, 0,  0, 0, 0, 0, 0},
+	{-1, -1, -1, -1, 0,  0, 0, 0, 0, 0},
 };
 
 typedef struct {
+	int piece_type;
+	bool fixit;
 	int x, y;
 	int curr_var;
 	int piece[PIECE_VARS][PIECE_AREA][PIECE_AREA];
@@ -169,7 +70,7 @@ current_piece_t* curr_piece = NULL;
 SDL_Window* win = NULL;
 SDL_Renderer* renderer = NULL;
 
-void draw_grid(SDL_Renderer* renderer) {
+void draw_grid_lines(SDL_Renderer* renderer) {
 	for (int y = 0; y <= LINES_HEIGHT; y++) {
 		for (int x = 0; x <= LINES_WIDTH; x++) {
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
@@ -191,6 +92,100 @@ void draw_grid(SDL_Renderer* renderer) {
 	}
 }
 
+void draw_grid(SDL_Renderer* renderer) {
+	for (int y = 0; y < LINES_HEIGHT; y++) {
+		for (int x = 0; x < LINES_WIDTH; x++) {
+			int piece = grid[y][x];
+
+			// Negative numbers for pieces fixed
+			if (piece < 0) {
+				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
+				SDL_Rect rect = {
+					GRID_X_OFFSET + (x * CELL_SIZE), GRID_Y_OFFSET + (y * CELL_SIZE),
+					CELL_SIZE, CELL_SIZE,
+				};
+
+				SDL_RenderFillRect(renderer, &rect);
+				SDL_RenderDrawRect(renderer, &rect);
+			}
+		}
+	}
+}
+
+bool check_action(int action_type) {
+	for (int y = 0; y < PIECE_AREA; y++) {
+		for (int x = 0; x < PIECE_AREA; x++) {
+			if (curr_piece->piece[curr_piece->curr_var][y][x] != 0) {
+				switch (action_type)
+				{
+				case MOVE_LEFT:
+					if (curr_piece->x - 1 < 0 || grid[curr_piece->y + y][curr_piece->x + x + 1] != 0) {
+						return false;
+					}
+					break;
+
+				case MOVE_RIGHT:
+					if (curr_piece->x >= LINES_WIDTH - 1 || grid[curr_piece->y + y][curr_piece->x + x - 1] != 0) {
+						return false;
+					}
+					break;
+
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+void update_current_piece() {
+	if (!curr_piece) {
+		return;
+	}
+
+	can_rotate = true;
+
+	if (curr_piece->fixit) {
+		for (int y = 0; y < PIECE_AREA; y++) {
+			for (int x = 0; x < PIECE_AREA; x++) {
+				if (curr_piece->piece[curr_piece->curr_var][y][x] != 0) {
+					grid[curr_piece->y + y][curr_piece->x + x] = -curr_piece->piece_type;
+					// LOGF("%d %d %d\n", curr_piece->y, curr_piece->x, -curr_piece->piece_type);
+				}
+			}
+		}
+
+		free(curr_piece);
+		curr_piece = NULL;
+		return;
+	}
+
+	curr_piece->y++;
+
+	for (int y = 0; y < PIECE_AREA; y++) {
+		for (int x = 0; x < PIECE_AREA; x++) {
+			if (curr_piece->piece[curr_piece->curr_var][y][x] != 0) {
+				if (grid[curr_piece->y + y][curr_piece->x + x] < 0) {
+					can_rotate = false;
+				}
+
+				if (grid[curr_piece->y + y + 1][curr_piece->x] < 0) {
+					curr_piece->fixit = true;
+					can_rotate = false;
+				}
+
+				if (curr_piece->y + y + 1 >= LINES_HEIGHT) {
+					curr_piece->fixit = true;
+					can_rotate = false;
+				}
+			}
+		}
+	}
+}
+
 void draw_current_piece(SDL_Renderer* rendered) {
 	if (!curr_piece) {
 		return;
@@ -200,10 +195,13 @@ void draw_current_piece(SDL_Renderer* rendered) {
 		for (int x = 0; x < PIECE_AREA; x++) {
 			if (curr_piece->piece[curr_piece->curr_var][y][x] != 0) {
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+
 				SDL_Rect rect = {
-					GRID_X_OFFSET + curr_piece->x + (x * CELL_SIZE), GRID_Y_OFFSET + curr_piece->y + (y * CELL_SIZE),
+					GRID_X_OFFSET + ((curr_piece->x + x) * CELL_SIZE),
+					GRID_Y_OFFSET + ((curr_piece->y + y) * CELL_SIZE),
 					CELL_SIZE, CELL_SIZE,
 				};
+
 				SDL_RenderFillRect(renderer, &rect);
 				SDL_RenderDrawRect(renderer, &rect);
 			}
@@ -216,6 +214,8 @@ void create_piece(int piece_type) {
 	curr_piece->curr_var = 0;
 	curr_piece->x = 0;
 	curr_piece->y = 0;
+	curr_piece->fixit = false;
+	curr_piece->piece_type = piece_type;
 
 	switch (piece_type) {
 	case TST:
@@ -331,9 +331,25 @@ int main(int argc, char* argv[]) {
 
 				case SDLK_UP:
 				{
-					curr_piece->curr_var++;
-					if (curr_piece->curr_var >= PIECE_VARS) {
-						curr_piece->curr_var = 0;
+					// if (can_rotate && curr_piece && check_can_action()) {
+					// 	curr_piece->curr_var++;
+					// 	if (curr_piece->curr_var >= PIECE_VARS) {
+					// 		curr_piece->curr_var = 0;
+					// 	}
+					// }
+				}
+				break;
+				case SDLK_RIGHT:
+				{
+					if (curr_piece && check_action(MOVE_RIGHT)) {
+						curr_piece->x++;
+					}
+				}
+				break;
+				case SDLK_LEFT:
+				{
+					if (curr_piece && check_action(MOVE_LEFT)) {
+						curr_piece->x--;
 					}
 				}
 				break;
@@ -350,14 +366,15 @@ int main(int argc, char* argv[]) {
 
 		current_time = SDL_GetTicks();
 		if (current_time > last_time && !dead) {
-			curr_piece->y += CELL_SIZE;
-			last_time = current_time + 1000;
+			update_current_piece();
+			last_time = current_time + SPEED;
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		draw_grid(renderer);
+		draw_grid_lines(renderer);
 		draw_current_piece(renderer);
+		draw_grid(renderer);
 		SDL_RenderPresent(renderer);
 	}
 
