@@ -1,26 +1,77 @@
-from sys import platform
+if int(ARGUMENTS.get('all', 0)):
+  hexEmbedToolEnv = Environment(
+    CPPPATH = [],
+    CCFLAGS = ['-Wall'],
+    LIBS = [],
+    LIBPATH = [],
+    CPPDEFINES = []
+  )
 
-IncludePath = [
-    './', 
-    '/usr/local/include',
-]
-LibsPath = [
-    '/usr/local/opt/zlib/lib'
-]   
-Libs = ['SDL2', 'SDL2_mixer', 'SDL2_image']
-CommonFlags = ['-Wall']
-Defines = []
+  hexEmbedProgram = hexEmbedToolEnv.Program(
+    target = "bin/hexembed",
+    source = Split("""
+      tools/hexembed.c
+    """)
+  )
 
-env = Environment(CPPPATH=IncludePath, CCFLAGS=CommonFlags, LIBS=Libs, LIBPATH=LibsPath, CPPDEFINES=Defines)
+  hexEmbedToolEnv.Default(hexEmbedProgram)
+
+gameEnv = Environment(
+  CPPPATH = ['/usr/local/include', './src'],
+  CCFLAGS = ['-Wall', '-std=c11', '-O3'],
+  LIBS = ['SDL2', 'SDL2_image', 'SDL2_ttf'],
+  LIBPATH = ['/usr/local/lib/'],
+  CPPDEFINES = []
+)
+
+if int(ARGUMENTS.get('warnings', 0)):
+  gameEnd.Append(CCFLAGS = ['-Wextra', '-Wpedantic'])
+
+if int(ARGUMENTS.get('wasm', 0)):
+  gameEnv.Replace(CC = "emcc")
+  gameEnv.Append(LINKFLAGS = [
+      '-s', 'USE_SDL=2',
+      '-s', 'USE_SDL_IMAGE=2',
+      '-s', 'SDL2_IMAGE_FORMATS=\'["png"]\'',
+      '-s', 'WASM=1',
+      '--shell-file', 'tools/wasm_page.html',
+      '--preload-file', 'resources',
+      '--use-preload-plugins',
+    ])
+  gameEnv.Append(LIBS = ['m'])
+  gameEnv.Append(CPPDEFINES = ['__EMSCRIPTEN__'])
 
 if int(ARGUMENTS.get('debug', 0)):
-  print(" --- COMPILING WITH DEBUG MODE ---")
-  env.Append(CPPDEFINES = '_DEBUG')
-  env.Append(CCFLAGS = '-g')
+  gameEnv['CCFLAGS'].remove('-O3')
+  gameEnv.Append(CPPDEFINES = '_DEBUG')
+  gameEnv.Append(CCFLAGS = '-g')
 
-files = Split("""
-  src/main.c
-""");
+target = 0
 
-program = env.Program(target="tetris", source=files)
-env.Default(program)
+if int(ARGUMENTS.get('wasm', 0)):
+  target = "bin/index.html"
+else:
+  target = "bin/tetros"
+
+gameProgram = gameEnv.Program(
+  target = target, 
+  source = Split("""
+    src/game.c
+    src/utils.c
+    src/scene.c
+    src/sprite.c
+    src/font.c
+    src/list.c
+    src/gui/button.c
+    src/gui/dpad.c
+    src/assets/assets.c
+    src/scenes/scene_end/scene_end.c
+    src/scenes/scene_menu/scene_menu.c
+    src/scenes/scene_play/scene_play.c
+    src/scenes/scene_play/grid.c
+    src/scenes/scene_play/tetro.c
+  """)
+)
+
+
+gameEnv.Default(gameProgram)
