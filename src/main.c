@@ -309,9 +309,6 @@ int main(int argc, char* argv[]) {
 	win = SDL_CreateWindow(GAME_TITLE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
-	create_piece(TEL);
-
-
 	LOG("Game start\n");
 
 	unsigned int last_time = 0, current_time;
@@ -348,7 +345,7 @@ int main(int argc, char* argv[]) {
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		// draw_grid(renderer);
+		draw_grid(renderer);
 		draw_current_piece(renderer);
 		SDL_RenderPresent(renderer);
 	}
