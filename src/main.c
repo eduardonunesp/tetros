@@ -26,9 +26,10 @@
 #define PIECE_VARS 4
 #define CELL_SIZE 24
 #define LINE_OFFSET 1
-#define SPEED 200
+#define SPEED 1500
 #define MOVE_RIGHT 1
 #define MOVE_LEFT -1
+#define ROTATE 10
 
 bool running = true;
 bool dead = false;
@@ -133,6 +134,37 @@ bool check_action(int action_type) {
 
 				default:
 					break;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool check_rotate() {
+	if (!can_rotate) {
+		return false;
+	}
+
+	int curr_var = curr_piece->curr_var + 1;
+	if (curr_var >= PIECE_VARS) {
+		curr_var = 0;
+	}
+
+	for (int y = 0; y < PIECE_AREA; y++) {
+		for (int x = 0; x < PIECE_AREA; x++) {
+			if (curr_piece->piece[curr_var][y][x] != 0) {
+				if (grid[curr_piece->y + y][curr_piece->x + x] < 0) {
+					return false;
+				}
+
+				if (curr_piece->x - 1 < 0 || grid[curr_piece->y + y][curr_piece->x + x + 1] != 0) {
+					return false;
+				}
+
+				if (curr_piece->x >= LINES_WIDTH - 1 || grid[curr_piece->y + y][curr_piece->x + x - 1] != 0) {
+					return false;
 				}
 			}
 		}
@@ -331,12 +363,12 @@ int main(int argc, char* argv[]) {
 
 				case SDLK_UP:
 				{
-					// if (can_rotate && curr_piece && check_can_action()) {
-					// 	curr_piece->curr_var++;
-					// 	if (curr_piece->curr_var >= PIECE_VARS) {
-					// 		curr_piece->curr_var = 0;
-					// 	}
-					// }
+					if (curr_piece && check_rotate()) {
+						curr_piece->curr_var++;
+						if (curr_piece->curr_var >= PIECE_VARS) {
+							curr_piece->curr_var = 0;
+						}
+					}
 				}
 				break;
 				case SDLK_RIGHT:
