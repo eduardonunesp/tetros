@@ -160,6 +160,7 @@ int grid[LINES_HEIGHT][LINES_WIDTH] = {
 };
 
 typedef struct {
+	int x, y;
 	int curr_var;
 	int piece[PIECE_VARS][PIECE_AREA][PIECE_AREA];
 } current_piece_t;
@@ -200,9 +201,10 @@ void draw_current_piece(SDL_Renderer* rendered) {
 			if (curr_piece->piece[curr_piece->curr_var][y][x] != 0) {
 				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 				SDL_Rect rect = {
-					x * CELL_SIZE, y * CELL_SIZE,
+					GRID_X_OFFSET + curr_piece->x + (x * CELL_SIZE), GRID_Y_OFFSET + curr_piece->y + (y * CELL_SIZE),
 					CELL_SIZE, CELL_SIZE,
 				};
+				SDL_RenderFillRect(renderer, &rect);
 				SDL_RenderDrawRect(renderer, &rect);
 			}
 		}
@@ -212,6 +214,8 @@ void draw_current_piece(SDL_Renderer* rendered) {
 void create_piece(int piece_type) {
 	curr_piece = (current_piece_t*)malloc(sizeof(current_piece_t));
 	curr_piece->curr_var = 0;
+	curr_piece->x = 0;
+	curr_piece->y = 0;
 
 	switch (piece_type) {
 	case TST:
@@ -309,6 +313,8 @@ int main(int argc, char* argv[]) {
 	win = SDL_CreateWindow(GAME_TITLE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
+	create_piece(TST);
+
 	LOG("Game start\n");
 
 	unsigned int last_time = 0, current_time;
@@ -331,7 +337,11 @@ int main(int argc, char* argv[]) {
 					}
 				}
 				break;
-
+				case SDLK_DOWN:
+				{
+					// curr_piece->y += CELL_SIZE;
+				}
+				break;
 				default:
 					break;
 				}
@@ -340,7 +350,8 @@ int main(int argc, char* argv[]) {
 
 		current_time = SDL_GetTicks();
 		if (current_time > last_time && !dead) {
-			last_time = current_time + 500;
+			curr_piece->y += CELL_SIZE;
+			last_time = current_time + 1000;
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
