@@ -2,6 +2,18 @@
 
 void parse_input(SDL_Event* event) {
 	switch (event->type) {
+	case SDL_KEYDOWN:
+		switch (event->key.keysym.sym)
+		{
+		case SDLK_DOWN:
+		{
+			accelerate = -1000;
+		}
+		break;
+		default:
+			break;
+		}
+		break;
 	case SDL_KEYUP:
 		switch (event->key.keysym.sym) {
 
@@ -27,11 +39,6 @@ void parse_input(SDL_Event* event) {
 			if (curr_tetromino && can_move_left()) {
 				curr_tetromino->x--;
 			}
-		}
-		break;
-		case SDLK_DOWN:
-		{
-			// curr_tetromino->y += CELL_SIZE;
 		}
 		break;
 		default:

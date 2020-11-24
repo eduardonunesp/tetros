@@ -1,5 +1,9 @@
 #include "tetris.h"
 
+int get_random_piece() {
+	return rand() % (5);
+}
+
 tetromino_t* create_tetromino(int tetromino_type) {
 	tetromino_t* new_tetromino = (tetromino_t*)malloc(sizeof(tetromino_t));
 	new_tetromino->variation = 0;

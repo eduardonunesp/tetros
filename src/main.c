@@ -3,6 +3,7 @@
 #include "tetris.h"
 
 extern tetromino_t* curr_tetromino;
+extern int accelerate;
 
 
 SDL_Window* win = NULL;
@@ -10,18 +11,21 @@ SDL_Renderer* renderer = NULL;
 bool running = true;
 
 int main(int argc, char* argv[]) {
+	accelerate = 0;
 	srand(time(0));
 	win = SDL_CreateWindow(GAME_TITLE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
 	init_grid();
 
-	curr_tetromino = create_tetromino(rand() % (5));
+	curr_tetromino = create_tetromino(get_random_piece());
 
 	LOG("Game start\n");
 
 	unsigned int last_time = 0, current_time;
 	while (running) {
+		accelerate = 0;
+
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT) {
@@ -31,11 +35,12 @@ int main(int argc, char* argv[]) {
 			parse_input(&event);
 		}
 
+		clear_line();
+
 		current_time = SDL_GetTicks();
-		if (current_time > last_time) {
-			clear_line();
+		if (current_time > last_time + accelerate) {
 			if (!curr_tetromino) {
-				curr_tetromino = create_tetromino(rand() % (5));
+				curr_tetromino = create_tetromino(get_random_piece());
 			}
 			update_tetromino();
 			last_time = current_time + SPEED;

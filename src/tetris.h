@@ -23,7 +23,7 @@
 #define PIECE_VARIATIONS 4
 #define CELL_SIZE 24
 
-#define SPEED 200
+#define SPEED 1000
 
 #define TST 1
 #define TET 2
@@ -134,6 +134,7 @@
 	{0, 0, 0, 0}, \
 };
 
+int accelerate;
 int grid[LINES_HEIGHT][LINES_WIDTH];
 
 typedef struct {
@@ -161,6 +162,7 @@ void draw_grid(SDL_Renderer* renderer);
 tetromino_t* create_tetromino(int tetromino_type);
 void draw_tetromino(SDL_Renderer* renderer);
 void update_tetromino();
+int get_random_piece();
 bool can_move_right();
 bool can_move_left();
 bool can_rotate();
