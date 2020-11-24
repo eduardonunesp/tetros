@@ -157,10 +157,13 @@ void draw_grid(SDL_Renderer* renderer);
 tetromino_t* create_tetromino(int tetromino_type);
 void draw_tetromino(SDL_Renderer* renderer);
 void update_tetromino();
+bool can_move_right();
+bool can_move_left();
 
 /**
  * EVENTS FUNCTIONS
  */
 void parse_input(SDL_Event* event);
+
 
 #endif // __TETRIS_H__

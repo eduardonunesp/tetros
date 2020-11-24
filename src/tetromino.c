@@ -163,9 +163,45 @@ void update_tetromino() {
 }
 
 bool can_move_right() {
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
+				if (curr_tetromino->x + x + 1 >= LINES_WIDTH) {
+					return false;
+				}
+
+				if (curr_tetromino->x + x + 1 >= LINES_WIDTH) {
+					return false;
+				}
+
+				if (grid[curr_tetromino->y + y][curr_tetromino->x + x + 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
 	return true;
 }
 
 bool can_move_left() {
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
+				if (curr_tetromino->x + x - 1 < 0) {
+					return false;
+				}
+
+				if (curr_tetromino->x + x - 1 < 0) {
+					return false;
+				}
+
+				if (grid[curr_tetromino->y + y][curr_tetromino->x + x - 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
 	return true;
 }
