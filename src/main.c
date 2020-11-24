@@ -33,6 +33,7 @@ int main(int argc, char* argv[]) {
 
 		current_time = SDL_GetTicks();
 		if (current_time > last_time) {
+			clear_line();
 			if (!curr_tetromino) {
 				curr_tetromino = create_tetromino(rand() % (5));
 			}

@@ -10,6 +10,11 @@ void init_grid() {
 			counter++;
 		}
 	}
+
+	for (int x = 0; x < LINES_WIDTH; x++) {
+		grid[19][x] = -1;
+	}
+
 	LOGF("Grid created with %d positions\n", counter);
 }
 
@@ -22,6 +27,26 @@ void print_grid() {
 				LOG("\n");
 			}
 			counter++;
+		}
+	}
+}
+
+void clear_line() {
+	int lines_to_clear[20];
+	memset(lines_to_clear, 0, 20);
+
+	for (int y = 0; y < LINES_HEIGHT; y++) {
+		bool has_line = true;
+
+		for (int x = 0; x < LINES_WIDTH; x++) {
+			if (grid[y][x] == 0) {
+				has_line = false;
+			}
+		}
+
+		if (has_line) {
+			LOGF("Has line %d\n", y);
+			lines_to_clear[y] = 1;
 		}
 	}
 }

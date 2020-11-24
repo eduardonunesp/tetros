@@ -152,6 +152,7 @@ tetromino_t* curr_tetromino;
  */
 void init_grid();
 void print_grid();
+void clear_line();
 void draw_grid(SDL_Renderer* renderer);
 
 /**
