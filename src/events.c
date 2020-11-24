@@ -17,14 +17,14 @@ void parse_input(SDL_Event* event) {
 		break;
 		case SDLK_RIGHT:
 		{
-			if (curr_tetromino) {
+			if (curr_tetromino && can_move_right()) {
 				curr_tetromino->x++;
 			}
 		}
 		break;
 		case SDLK_LEFT:
 		{
-			if (curr_tetromino) {
+			if (curr_tetromino && can_move_left()) {
 				curr_tetromino->x--;
 			}
 		}

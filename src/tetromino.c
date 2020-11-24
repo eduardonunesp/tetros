@@ -161,3 +161,11 @@ void update_tetromino() {
 		curr_tetromino->y++;
 	}
 }
+
+bool can_move_right() {
+	return true;
+}
+
+bool can_move_left() {
+	return true;
+}
