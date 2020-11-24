@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 
 	init_grid();
 
-	curr_tetromino = create_tetromino(TST);
+	curr_tetromino = create_tetromino(rand() % (5));
 
 	LOG("Game start\n");
 
@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 		current_time = SDL_GetTicks();
 		if (current_time > last_time) {
 			if (!curr_tetromino) {
-				curr_tetromino = create_tetromino(TST);
+				curr_tetromino = create_tetromino(rand() % (5));
 			}
 			update_tetromino();
 			last_time = current_time + SPEED;

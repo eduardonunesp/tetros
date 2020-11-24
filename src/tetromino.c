@@ -16,9 +16,8 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	switch (tetromino_type) {
 	case TST:
 	{
-		new_tetromino->color.a = 255;
 		new_tetromino->color.r = 0;
-		new_tetromino->color.g = 0;
+		new_tetromino->color.g = 255;
 		new_tetromino->color.b = 255;
 
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TST0;
@@ -38,6 +37,10 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	break;
 	case TET:
 	{
+		new_tetromino->color.r = 255;
+		new_tetromino->color.g = 0;
+		new_tetromino->color.b = 255;
+
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TET0;
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TET1;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TET2;
@@ -55,6 +58,10 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	break;
 	case TSW:
 	{
+		new_tetromino->color.r = 255;
+		new_tetromino->color.g = 0;
+		new_tetromino->color.b = 0;
+
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TSW0;
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TSW1;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TSW0;
@@ -72,6 +79,10 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	break;
 	case TSQ:
 	{
+		new_tetromino->color.r = 255;
+		new_tetromino->color.g = 255;
+		new_tetromino->color.b = 0;
+
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TSQ0;
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TSQ0;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TSQ0;
@@ -89,6 +100,10 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	break;
 	case TEL:
 	{
+		new_tetromino->color.r = 0;
+		new_tetromino->color.g = 0;
+		new_tetromino->color.b = 255;
+
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TEL0;
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TEL1;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TEL2;

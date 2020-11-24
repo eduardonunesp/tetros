@@ -53,7 +53,43 @@ void draw_grid(SDL_Renderer* renderer) {
 
 			// Negative numbers for pieces fixed
 			if (piece < 0) {
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+				SDL_Color color;
+
+				switch (piece)
+				{
+				case -1:
+					color.r = 0;
+					color.g = 255;
+					color.b = 255;
+					break;
+				case -2:
+
+					color.r = 255;
+					color.g = 0;
+					color.b = 255;
+					break;
+				case -3:
+
+					color.r = 255;
+					color.g = 0;
+					color.b = 0;
+					break;
+				case -4:
+
+					color.r = 255;
+					color.g = 255;
+					color.b = 0;
+					break;
+				case -5:
+					color.r = 0;
+					color.g = 0;
+					color.b = 255;
+					break;
+				default:
+					break;
+				}
+
+				SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, SDL_ALPHA_OPAQUE);
 
 				SDL_Rect rect = {
 					GRID_X_OFFSET + (x * CELL_SIZE), GRID_Y_OFFSET + (y * CELL_SIZE),
