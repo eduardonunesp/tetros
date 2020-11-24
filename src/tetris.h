@@ -23,6 +23,8 @@
 #define PIECE_VARIATIONS 4
 #define CELL_SIZE 24
 
+#define SPEED 1000
+
 #define TST 1
 #define TET 2
 #define TSW 3
@@ -159,6 +161,7 @@ void draw_tetromino(SDL_Renderer* renderer);
 void update_tetromino();
 bool can_move_right();
 bool can_move_left();
+bool can_rotate();
 
 /**
  * EVENTS FUNCTIONS

@@ -7,7 +7,7 @@ void parse_input(SDL_Event* event) {
 
 		case SDLK_UP:
 		{
-			if (curr_tetromino) {
+			if (curr_tetromino && can_rotate()) {
 				curr_tetromino->variation++;
 				if (curr_tetromino->variation >= PIECE_VARIATIONS) {
 					curr_tetromino->variation = 0;

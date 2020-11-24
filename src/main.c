@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 				curr_tetromino = create_tetromino(TST);
 			}
 			update_tetromino();
-			last_time = current_time + 200;
+			last_time = current_time + SPEED;
 		}
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

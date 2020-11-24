@@ -144,11 +144,6 @@ void update_tetromino() {
 					return;
 				}
 
-				if (curr_tetromino->y + y + 1 >= LINES_HEIGHT) {
-					curr_tetromino->pinned = true;
-					return;
-				}
-
 				if (grid[curr_tetromino->y + y + 1][curr_tetromino->x + x] != 0) {
 					curr_tetromino->pinned = true;
 					return;
@@ -166,10 +161,6 @@ bool can_move_right() {
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
 			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-				if (curr_tetromino->x + x + 1 >= LINES_WIDTH) {
-					return false;
-				}
-
 				if (curr_tetromino->x + x + 1 >= LINES_WIDTH) {
 					return false;
 				}
@@ -192,11 +183,42 @@ bool can_move_left() {
 					return false;
 				}
 
-				if (curr_tetromino->x + x - 1 < 0) {
+				if (grid[curr_tetromino->y + y][curr_tetromino->x + x - 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool can_rotate() {
+	if (!curr_tetromino) {
+		return false;
+	}
+
+	int next_variation = curr_tetromino->variation + 1;
+	if (next_variation >= PIECE_VARIATIONS) {
+		next_variation = 0;
+	}
+
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (curr_tetromino && curr_tetromino->piece[next_variation][y][x] != 0) {
+				if (curr_tetromino->y + y >= LINES_HEIGHT) {
 					return false;
 				}
 
-				if (grid[curr_tetromino->y + y][curr_tetromino->x + x - 1] != 0) {
+				if (curr_tetromino->x + x >= LINES_WIDTH) {
+					return false;
+				}
+
+				if (curr_tetromino->x + x < 0) {
+					return false;
+				}
+
+				if (grid[curr_tetromino->y + y][curr_tetromino->x + x] != 0) {
 					return false;
 				}
 			}
