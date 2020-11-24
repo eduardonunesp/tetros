@@ -20,6 +20,9 @@ if int(ARGUMENTS.get('debug', 0)):
 
 files = Split("""
   src/main.c
+  src/grid.c
+  src/tetromino.c
+  src/events.c
 """);
 
 program = env.Program(target="tetris", source=files)
