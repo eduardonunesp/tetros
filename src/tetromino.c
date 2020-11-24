@@ -8,9 +8,19 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	new_tetromino->pinned = false;
 	new_tetromino->type = tetromino_type;
 
+	new_tetromino->color.a = 255;
+	new_tetromino->color.r = 255;
+	new_tetromino->color.g = 255;
+	new_tetromino->color.b = 255;
+
 	switch (tetromino_type) {
 	case TST:
 	{
+		new_tetromino->color.a = 255;
+		new_tetromino->color.r = 0;
+		new_tetromino->color.g = 0;
+		new_tetromino->color.b = 255;
+
 		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TST0;
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TST1;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TST0;
@@ -105,7 +115,12 @@ void draw_tetromino(SDL_Renderer* renderer) {
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
 			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-				SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+				SDL_SetRenderDrawColor(renderer,
+					curr_tetromino->color.r,
+					curr_tetromino->color.g,
+					curr_tetromino->color.b,
+					SDL_ALPHA_OPAQUE
+				);
 
 				SDL_Rect rect = {
 					GRID_X_OFFSET + ((curr_tetromino->x + x) * CELL_SIZE),

@@ -137,6 +137,7 @@
 int grid[LINES_HEIGHT][LINES_WIDTH];
 
 typedef struct {
+	SDL_Color color;
 	bool pinned;
 	int type;
 	int x, y;
