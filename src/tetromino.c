@@ -266,6 +266,10 @@ bool can_move_right(TYPE_GRID, tetromino_t* tetromino) {
 		return false;
 	}
 
+	if (tetromino->pinned) {
+		return false;
+	}
+
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
 			if (tetromino->piece[tetromino->variation][y][x] != 0) {
@@ -288,6 +292,10 @@ bool can_move_left(TYPE_GRID, tetromino_t* tetromino) {
 		return false;
 	}
 
+	if (tetromino->pinned) {
+		return false;
+	}
+
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
 			if (tetromino->piece[tetromino->variation][y][x] != 0) {
@@ -307,6 +315,10 @@ bool can_move_left(TYPE_GRID, tetromino_t* tetromino) {
 
 bool can_rotate(TYPE_GRID, tetromino_t* tetromino) {
 	if (!tetromino) {
+		return false;
+	}
+
+	if (tetromino->pinned) {
 		return false;
 	}
 

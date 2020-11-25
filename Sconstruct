@@ -22,7 +22,6 @@ files = Split("""
   src/main.c
   src/grid.c
   src/tetromino.c
-  src/events.c
 """);
 
 program = env.Program(target="tetris", source=files)

@@ -89,9 +89,9 @@ int main(int argc, char* argv[]) {
 			}
 
 			update_tetromino(grid, &curr_tetromino);
+
 			last_time = current_time + SPEED;
 		}
-
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
