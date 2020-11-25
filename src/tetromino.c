@@ -155,6 +155,10 @@ void draw_tetromino(SDL_Renderer* renderer) {
 }
 
 void update_tetromino() {
+	if (curr_tetromino) {
+		curr_tetromino->y++;
+	}
+
 	if (curr_tetromino && curr_tetromino->pinned) {
 		for (int y = 0; y < PIECE_AREA_Y; y++) {
 			for (int x = 0; x < PIECE_AREA_X; x++) {
@@ -184,10 +188,6 @@ void update_tetromino() {
 				}
 			}
 		}
-	}
-
-	if (curr_tetromino) {
-		curr_tetromino->y++;
 	}
 }
 
