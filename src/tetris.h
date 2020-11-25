@@ -29,7 +29,7 @@
 #define INITIAL_POSITION_X 5
 #define INITIAL_POSITION_Y -1
 
-#define SPEED 100
+#define SPEED 1000
 
 #define N_TETROMINOS 6
 #define TST  1
@@ -47,18 +47,18 @@
 #define TELF  -6
 
 // straight tetromino
-#define TST0 {  \
-	{1,0,0,0}, \
-	{1,0,0,0}, \
-	{1,0,0,0}, \
-	{1,0,0,0}, \
+#define TST0 { \
+	{1,0,0,0},   \
+	{1,0,0,0},   \
+	{1,0,0,0},   \
+	{1,0,0,0},   \
 }
 
 #define TST1 {  \
-	{0,0,0,0}, \
-	{1,1,1,1}, \
-	{0,0,0,0}, \
-	{0,0,0,0}, \
+	{0,0,0,0},    \
+	{1,1,1,1},    \
+	{0,0,0,0},    \
+	{0,0,0,0},    \
 }
 
 // T-tetromino
@@ -107,7 +107,7 @@
 }
 
 // skew tetromino 2
-#define TSWI0 {  \
+#define TSWI0 { \
 	{0, 3, 3, 0}, \
 	{3, 3, 0, 0}, \
 	{0, 0, 0, 0}, \
@@ -115,7 +115,7 @@
 }
 
 // skew tetromino 2
-#define TSWI1 {  \
+#define TSWI1 { \
 	{3, 0, 0, 0}, \
 	{3, 3, 0, 0}, \
 	{0, 3, 0, 0}, \
@@ -131,28 +131,28 @@
 };
 
 // L-tetromino
-#define TEL0 {   \
+#define TEL0 {  \
 	{5, 0, 0, 0}, \
 	{5, 0, 0, 0}, \
 	{5, 5, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
-#define TEL1 {   \
+#define TEL1 {  \
 	{0, 0, 0, 0}, \
 	{5, 5, 5, 0}, \
 	{5, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
-#define TEL2 {   \
+#define TEL2 {  \
 	{5, 5, 0, 0}, \
 	{0, 5, 0, 0}, \
 	{0, 5, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
-#define TEL3 {   \
+#define TEL3 {  \
 	{0, 0, 5, 0}, \
 	{5, 5, 5, 0}, \
 	{0, 0, 0, 0}, \
@@ -190,10 +190,5 @@ int get_random_piece();
 bool can_move_right(TYPE_GRID, tetromino_t* tetromino);
 bool can_move_left(TYPE_GRID, tetromino_t* tetromino);
 bool can_rotate(TYPE_GRID, tetromino_t* tetromino);
-
-/**
- * EVENTS FUNCTIONS
- */
-void parse_input(SDL_Event* event, TYPE_GRID, tetromino_t* tetromino);
 
 #endif // __TETRIS_H__
