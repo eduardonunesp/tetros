@@ -23,6 +23,12 @@
 #define PIECE_VARIATIONS 4
 #define CELL_SIZE 24
 
+#define NEXT_TETROMINO_X 16
+#define NEXT_TETROMINO_Y 4
+
+#define INITIAL_POSITION_X 4
+#define INITIAL_POSITION_Y -1
+
 #define SPEED 1000
 
 #define N_TETROMINOS 6
@@ -86,56 +92,56 @@
 
 // skew tetromino
 #define TSW0 {  \
+	{3, 3, 0, 0}, \
 	{0, 3, 3, 0}, \
-	{0, 0, 3, 3}, \
 	{0, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 }
 
 // skew tetromino
 #define TSW1 {  \
-	{0, 0, 3, 0}, \
-	{0, 3, 3, 0}, \
 	{0, 3, 0, 0}, \
+	{3, 3, 0, 0}, \
+	{3, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 }
 
 // skew tetromino 2
 #define TSWI0 {  \
-	{0, 0, 3, 3}, \
 	{0, 3, 3, 0}, \
+	{3, 3, 0, 0}, \
 	{0, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 }
 
 // skew tetromino 2
 #define TSWI1 {  \
+	{3, 0, 0, 0}, \
+	{3, 3, 0, 0}, \
 	{0, 3, 0, 0}, \
-	{0, 3, 3, 0}, \
-	{0, 0, 3, 0}, \
 	{0, 0, 0, 0}, \
 }
 
 // square tetromino
 #define TSQ0 {  \
-	{0, 4, 4, 0}, \
-	{0, 4, 4, 0}, \
+	{4, 4, 0, 0}, \
+	{4, 4, 0, 0}, \
 	{0, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
 // L-tetromino
 #define TEL0 {   \
-	{0, 5, 0, 0}, \
-	{0, 5, 0, 0}, \
-	{0, 5, 5, 0}, \
+	{5, 0, 0, 0}, \
+	{5, 0, 0, 0}, \
+	{5, 5, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
 #define TEL1 {   \
 	{0, 0, 0, 0}, \
-	{0, 5, 5, 5}, \
-	{0, 5, 0, 0}, \
+	{5, 5, 5, 0}, \
+	{5, 0, 0, 0}, \
 	{0, 0, 0, 0}, \
 };
 
@@ -166,6 +172,7 @@ typedef struct {
 } tetromino_t;
 
 tetromino_t* curr_tetromino;
+tetromino_t* next_tetromino;
 
 /**
  * GRID FUNCTIONS
@@ -178,8 +185,10 @@ void draw_grid(SDL_Renderer* renderer);
 /**
  * TETROMINO FUNCTIONS
  */
-tetromino_t* create_tetromino(int tetromino_type);
+tetromino_t* create_tetromino(int tetromino_type, int x, int y);
+tetromino_t* create_from_next(tetromino_t* tetromino);
 void draw_tetromino(SDL_Renderer* renderer);
+void draw_next_tetromino(SDL_Renderer* renderer);
 void update_tetromino();
 int get_random_piece();
 bool can_move_right();

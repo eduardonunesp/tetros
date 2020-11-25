@@ -1,14 +1,35 @@
 #include "tetris.h"
 
 int get_random_piece() {
-	return rand() % (N_TETROMINOS);
+	return rand() % (N_TETROMINOS)+1;
 }
 
-tetromino_t* create_tetromino(int tetromino_type) {
+tetromino_t* create_from_next(tetromino_t* tetromino) {
+	tetromino_t* new_tetromino = (tetromino_t*)malloc(sizeof(tetromino_t));
+
+	for (int i = 0; i < PIECE_VARIATIONS; i++) {
+		for (int y = 0; y < PIECE_AREA_Y; y++) {
+			for (int x = 0; x < PIECE_AREA_X; x++) {
+				new_tetromino->piece[i][y][x] = tetromino->piece[i][y][x];
+			}
+		}
+	}
+
+	new_tetromino->variation = tetromino->variation;
+	new_tetromino->x = INITIAL_POSITION_X;
+	new_tetromino->y = INITIAL_POSITION_Y;
+	new_tetromino->pinned = false;
+	new_tetromino->color = tetromino->color;
+	new_tetromino->type = tetromino->type;
+
+	return new_tetromino;
+}
+
+tetromino_t* create_tetromino(int tetromino_type, int x, int y) {
 	tetromino_t* new_tetromino = (tetromino_t*)malloc(sizeof(tetromino_t));
 	new_tetromino->variation = 0;
-	new_tetromino->x = 0;
-	new_tetromino->y = 0;
+	new_tetromino->x = x;
+	new_tetromino->y = y;
 	new_tetromino->pinned = false;
 	new_tetromino->type = tetromino_type;
 
@@ -149,6 +170,30 @@ tetromino_t* create_tetromino(int tetromino_type) {
 	}
 
 	return new_tetromino;
+}
+
+void draw_next_tetromino(SDL_Renderer* renderer) {
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (next_tetromino && next_tetromino->piece[next_tetromino->variation][y][x] != 0) {
+				SDL_SetRenderDrawColor(renderer,
+					next_tetromino->color.r,
+					next_tetromino->color.g,
+					next_tetromino->color.b,
+					SDL_ALPHA_OPAQUE
+				);
+
+				SDL_Rect rect = {
+					(next_tetromino->x + x) * CELL_SIZE,
+					(next_tetromino->y + y) * CELL_SIZE,
+					CELL_SIZE, CELL_SIZE,
+				};
+
+				SDL_RenderFillRect(renderer, &rect);
+				SDL_RenderDrawRect(renderer, &rect);
+			}
+		}
+	}
 }
 
 void draw_tetromino(SDL_Renderer* renderer) {
