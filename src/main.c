@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 
 	init_grid(grid);
 
-	curr_tetromino = create_tetromino(TST, INITIAL_POSITION_X, INITIAL_POSITION_Y);
+	curr_tetromino = create_tetromino(get_random_piece(), INITIAL_POSITION_X, INITIAL_POSITION_Y);
 	next_tetromino = create_tetromino(get_random_piece(), NEXT_TETROMINO_X, NEXT_TETROMINO_Y);
 
 	LOG("Game start\n");
@@ -89,7 +89,6 @@ int main(int argc, char* argv[]) {
 			}
 
 			update_tetromino(grid, &curr_tetromino);
-
 			last_time = current_time + SPEED;
 		}
 

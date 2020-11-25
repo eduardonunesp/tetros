@@ -196,5 +196,4 @@ bool can_rotate(TYPE_GRID, tetromino_t* tetromino);
  */
 void parse_input(SDL_Event* event, TYPE_GRID, tetromino_t* tetromino);
 
-
 #endif // __TETRIS_H__
