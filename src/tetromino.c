@@ -1,7 +1,9 @@
 #include "tetris.h"
 
 int get_random_piece() {
-	return rand() % (N_TETROMINOS)+1;
+	int n = rand() % (N_TETROMINOS)+1;
+	LOGF("Next piece %d\n", n);
+	return n;
 }
 
 tetromino_t* create_from_next(tetromino_t* tetromino) {
@@ -172,20 +174,20 @@ tetromino_t* create_tetromino(int tetromino_type, int x, int y) {
 	return new_tetromino;
 }
 
-void draw_next_tetromino(SDL_Renderer* renderer) {
+void draw_next_tetromino(SDL_Renderer* renderer, tetromino_t* tetromino) {
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (next_tetromino && next_tetromino->piece[next_tetromino->variation][y][x] != 0) {
+			if (tetromino && tetromino->piece[tetromino->variation][y][x] != 0) {
 				SDL_SetRenderDrawColor(renderer,
-					next_tetromino->color.r,
-					next_tetromino->color.g,
-					next_tetromino->color.b,
+					tetromino->color.r,
+					tetromino->color.g,
+					tetromino->color.b,
 					SDL_ALPHA_OPAQUE
 				);
 
 				SDL_Rect rect = {
-					(next_tetromino->x + x) * CELL_SIZE,
-					(next_tetromino->y + y) * CELL_SIZE,
+					(tetromino->x + x) * CELL_SIZE,
+					(tetromino->y + y) * CELL_SIZE,
 					CELL_SIZE, CELL_SIZE,
 				};
 
@@ -196,20 +198,20 @@ void draw_next_tetromino(SDL_Renderer* renderer) {
 	}
 }
 
-void draw_tetromino(SDL_Renderer* renderer) {
+void draw_tetromino(SDL_Renderer* renderer, tetromino_t* tetromino) {
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
+			if (tetromino && tetromino->piece[tetromino->variation][y][x] != 0) {
 				SDL_SetRenderDrawColor(renderer,
-					curr_tetromino->color.r,
-					curr_tetromino->color.g,
-					curr_tetromino->color.b,
+					tetromino->color.r,
+					tetromino->color.g,
+					tetromino->color.b,
 					SDL_ALPHA_OPAQUE
 				);
 
 				SDL_Rect rect = {
-					GRID_X_OFFSET + ((curr_tetromino->x + x) * CELL_SIZE),
-					GRID_Y_OFFSET + ((curr_tetromino->y + y) * CELL_SIZE),
+					GRID_X_OFFSET + ((tetromino->x + x) * CELL_SIZE),
+					GRID_Y_OFFSET + ((tetromino->y + y) * CELL_SIZE),
 					CELL_SIZE, CELL_SIZE,
 				};
 
@@ -220,105 +222,115 @@ void draw_tetromino(SDL_Renderer* renderer) {
 	}
 }
 
-void update_tetromino() {
-	if (curr_tetromino && curr_tetromino->pinned) {
+void update_tetromino(TYPE_GRID, tetromino_t** tetromino) {
+	if (!tetromino || !(*tetromino)) {
+		return;
+	}
+
+	if ((*tetromino)->pinned) {
 		for (int y = 0; y < PIECE_AREA_Y; y++) {
 			for (int x = 0; x < PIECE_AREA_X; x++) {
-				if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-					grid[curr_tetromino->y + y][curr_tetromino->x + x] = -curr_tetromino->type;
+				if ((*tetromino)->piece[(*tetromino)->variation][y][x] != 0) {
+					grid[(*tetromino)->y + y][(*tetromino)->x + x] = -(*tetromino)->type;
 				}
 			}
 		}
 
-		free(curr_tetromino);
-		curr_tetromino = NULL;
+		free(*tetromino);
+		(*tetromino) = NULL;
 		return;
 	}
 
 
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-				if (curr_tetromino->y + y + 1 >= LINES_HEIGHT) {
-					curr_tetromino->pinned = true;
+			if ((*tetromino)->piece[(*tetromino)->variation][y][x] != 0) {
+				if ((*tetromino)->y + y + 1 >= LINES_HEIGHT) {
+					(*tetromino)->pinned = true;
 					return;
 				}
 
-				if (grid[curr_tetromino->y + y + 1][curr_tetromino->x + x] != 0) {
-					curr_tetromino->pinned = true;
+				if (grid[(*tetromino)->y + y + 1][(*tetromino)->x + x] != 0) {
+					(*tetromino)->pinned = true;
 					return;
 				}
 			}
 		}
 	}
 
-	if (curr_tetromino) {
-		curr_tetromino->y++;
-	}
+	(*tetromino)->y++;
 }
 
-bool can_move_right() {
-	for (int y = 0; y < PIECE_AREA_Y; y++) {
-		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-				if (curr_tetromino->x + x + 1 >= LINES_WIDTH) {
-					return false;
-				}
-
-				if (grid[curr_tetromino->y + y][curr_tetromino->x + x + 1] != 0) {
-					return false;
-				}
-			}
-		}
-	}
-
-	return true;
-}
-
-bool can_move_left() {
-	for (int y = 0; y < PIECE_AREA_Y; y++) {
-		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (curr_tetromino && curr_tetromino->piece[curr_tetromino->variation][y][x] != 0) {
-				if (curr_tetromino->x + x - 1 < 0) {
-					return false;
-				}
-
-				if (grid[curr_tetromino->y + y][curr_tetromino->x + x - 1] != 0) {
-					return false;
-				}
-			}
-		}
-	}
-
-	return true;
-}
-
-bool can_rotate() {
-	if (!curr_tetromino) {
+bool can_move_right(TYPE_GRID, tetromino_t* tetromino) {
+	if (!tetromino) {
 		return false;
 	}
 
-	int next_variation = curr_tetromino->variation + 1;
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (tetromino->piece[tetromino->variation][y][x] != 0) {
+				if (tetromino->x + x + 1 >= LINES_WIDTH) {
+					return false;
+				}
+
+				if (grid[tetromino->y + y][tetromino->x + x + 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool can_move_left(TYPE_GRID, tetromino_t* tetromino) {
+	if (!tetromino) {
+		return false;
+	}
+
+	for (int y = 0; y < PIECE_AREA_Y; y++) {
+		for (int x = 0; x < PIECE_AREA_X; x++) {
+			if (tetromino->piece[tetromino->variation][y][x] != 0) {
+				if (tetromino->x + x - 1 < 0) {
+					return false;
+				}
+
+				if (grid[tetromino->y + y][tetromino->x + x - 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool can_rotate(TYPE_GRID, tetromino_t* tetromino) {
+	if (!tetromino) {
+		return false;
+	}
+
+	int next_variation = tetromino->variation + 1;
 	if (next_variation >= PIECE_VARIATIONS) {
 		next_variation = 0;
 	}
 
 	for (int y = 0; y < PIECE_AREA_Y; y++) {
 		for (int x = 0; x < PIECE_AREA_X; x++) {
-			if (curr_tetromino && curr_tetromino->piece[next_variation][y][x] != 0) {
-				if (curr_tetromino->y + y >= LINES_HEIGHT) {
+			if (tetromino && tetromino->piece[next_variation][y][x] != 0) {
+				if (tetromino->y + y >= LINES_HEIGHT) {
 					return false;
 				}
 
-				if (curr_tetromino->x + x >= LINES_WIDTH) {
+				if (tetromino->x + x >= LINES_WIDTH) {
 					return false;
 				}
 
-				if (curr_tetromino->x + x < 0) {
+				if (tetromino->x + x < 0) {
 					return false;
 				}
 
-				if (grid[curr_tetromino->y + y][curr_tetromino->x + x] != 0) {
+				if (grid[tetromino->y + y][tetromino->x + x] != 0) {
 					return false;
 				}
 			}

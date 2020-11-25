@@ -26,10 +26,10 @@
 #define NEXT_TETROMINO_X 16
 #define NEXT_TETROMINO_Y 4
 
-#define INITIAL_POSITION_X 4
+#define INITIAL_POSITION_X 0
 #define INITIAL_POSITION_Y -1
 
-#define SPEED 1000
+#define SPEED 100
 
 #define N_TETROMINOS 6
 #define TST  1
@@ -159,8 +159,7 @@
 	{0, 0, 0, 0}, \
 };
 
-int accelerate;
-int grid[LINES_HEIGHT][LINES_WIDTH];
+#define TYPE_GRID int grid[][LINES_WIDTH]
 
 typedef struct {
 	SDL_Color color;
@@ -171,34 +170,31 @@ typedef struct {
 	int piece[PIECE_VARIATIONS][PIECE_AREA_X][PIECE_AREA_Y];
 } tetromino_t;
 
-tetromino_t* curr_tetromino;
-tetromino_t* next_tetromino;
-
 /**
  * GRID FUNCTIONS
  */
-void init_grid();
-void print_grid();
-void clear_line();
-void draw_grid(SDL_Renderer* renderer);
+void init_grid(TYPE_GRID);
+void print_grid(TYPE_GRID);
+void clear_line(TYPE_GRID);
+void draw_grid(SDL_Renderer* renderer, TYPE_GRID);
 
 /**
  * TETROMINO FUNCTIONS
  */
 tetromino_t* create_tetromino(int tetromino_type, int x, int y);
 tetromino_t* create_from_next(tetromino_t* tetromino);
-void draw_tetromino(SDL_Renderer* renderer);
-void draw_next_tetromino(SDL_Renderer* renderer);
-void update_tetromino();
+void draw_tetromino(SDL_Renderer* renderer, tetromino_t* tetromino);
+void draw_next_tetromino(SDL_Renderer* renderer, tetromino_t* tetromino);
+void update_tetromino(TYPE_GRID, tetromino_t** tetromino);
 int get_random_piece();
-bool can_move_right();
-bool can_move_left();
-bool can_rotate();
+bool can_move_right(TYPE_GRID, tetromino_t* tetromino);
+bool can_move_left(TYPE_GRID, tetromino_t* tetromino);
+bool can_rotate(TYPE_GRID, tetromino_t* tetromino);
 
 /**
  * EVENTS FUNCTIONS
  */
-void parse_input(SDL_Event* event);
+void parse_input(SDL_Event* event, TYPE_GRID, tetromino_t* tetromino);
 
 
 #endif // __TETRIS_H__

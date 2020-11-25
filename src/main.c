@@ -2,24 +2,25 @@
 #include <stdbool.h>
 #include "tetris.h"
 
-extern tetromino_t* curr_tetromino;
-extern tetromino_t* next_tetromino;
 extern int accelerate;
-
 
 SDL_Window* win = NULL;
 SDL_Renderer* renderer = NULL;
 bool running = true;
 
 int main(int argc, char* argv[]) {
-	accelerate = 0;
 	srand(time(0));
 	win = SDL_CreateWindow(GAME_TITLE, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
 	renderer = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED);
 
-	init_grid();
+	tetromino_t* curr_tetromino = NULL;
+	tetromino_t* next_tetromino = NULL;
+	int accelerate;
+	int grid[LINES_HEIGHT][LINES_WIDTH];
 
-	curr_tetromino = create_tetromino(get_random_piece(), INITIAL_POSITION_X, INITIAL_POSITION_Y);
+	init_grid(grid);
+
+	curr_tetromino = create_tetromino(TST, INITIAL_POSITION_X, INITIAL_POSITION_Y);
 	next_tetromino = create_tetromino(get_random_piece(), NEXT_TETROMINO_X, NEXT_TETROMINO_Y);
 
 	LOG("Game start\n");
@@ -34,28 +35,69 @@ int main(int argc, char* argv[]) {
 				running = false;
 			}
 
-			parse_input(&event);
+			switch (event.type) {
+			case SDL_KEYDOWN: {
+				switch (event.key.keysym.sym) {
+				case SDLK_DOWN:
+				{
+					accelerate = -1000;
+				}
+				break;
+				case SDLK_UP:
+				{
+					if (curr_tetromino && can_rotate(grid, curr_tetromino)) {
+						curr_tetromino->variation++;
+						if (curr_tetromino->variation >= PIECE_VARIATIONS) {
+							curr_tetromino->variation = 0;
+						}
+					}
+				}
+				break;
+				case SDLK_RIGHT:
+				{
+					if (curr_tetromino && can_move_right(grid, curr_tetromino)) {
+						curr_tetromino->x++;
+					}
+				}
+				break;
+				case SDLK_LEFT:
+				{
+					if (curr_tetromino && can_move_left(grid, curr_tetromino)) {
+						curr_tetromino->x--;
+					}
+				}
+				break;
+				default:
+					break;
+				}
+			}
+			default:
+				break;
+			}
 		}
 
-		clear_line();
+		clear_line(grid);
 
 		current_time = SDL_GetTicks();
-		if (!curr_tetromino || current_time > last_time + accelerate) {
+		if (current_time > last_time + accelerate) {
 			if (!curr_tetromino) {
 				curr_tetromino = create_from_next(next_tetromino);
+				tetromino_t* new_next_tetromino = create_tetromino(get_random_piece(), NEXT_TETROMINO_X, NEXT_TETROMINO_Y);
 				free(next_tetromino);
 				next_tetromino = NULL;
-				next_tetromino = create_tetromino(get_random_piece(), NEXT_TETROMINO_X, NEXT_TETROMINO_Y);
+				next_tetromino = new_next_tetromino;
 			}
-			update_tetromino();
+
+			update_tetromino(grid, &curr_tetromino);
 			last_time = current_time + SPEED;
 		}
 
+
 		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 		SDL_RenderClear(renderer);
-		draw_grid(renderer);
-		draw_tetromino(renderer);
-		draw_next_tetromino(renderer);
+		draw_grid(renderer, grid);
+		draw_tetromino(renderer, curr_tetromino);
+		draw_next_tetromino(renderer, next_tetromino);
 		SDL_RenderPresent(renderer);
 	}
 

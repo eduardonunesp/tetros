@@ -2,7 +2,7 @@
 #include "log.h"
 #include <SDL2/SDL.h>
 
-void init_grid() {
+void init_grid(TYPE_GRID) {
 	int counter = 0;
 
 	int grid_ref[LINES_HEIGHT][LINES_WIDTH] = {
@@ -22,10 +22,17 @@ void init_grid() {
 		{0,0,0,0,0,0,0,0,0,0,},
 		{0,0,0,0,0,0,0,0,0,0,},
 		{0,0,0,0,0,0,0,0,0,0,},
-		{0,0,0,0,0,0,0,0,0,0,},
-		{0,0,0,0,0,0,0,0,0,0,},
-		{0,0,0,0,0,0,0,0,0,0,},
-		{0,0,0,0,0,0,0,0,0,0,},
+		{0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+		{0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+		{0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+		{0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
+		// {0,0,0,0,0,0,0,0,0,0,},
 	};
 
 	for (int y = 0; y < LINES_HEIGHT; y++) {
@@ -38,7 +45,7 @@ void init_grid() {
 	LOGF("Grid created with %d positions\n", counter);
 }
 
-void print_grid() {
+void print_grid(TYPE_GRID) {
 	int counter = 1;
 	for (int y = 0; y < LINES_HEIGHT; y++) {
 		for (int x = 0; x < LINES_WIDTH; x++) {
@@ -51,8 +58,8 @@ void print_grid() {
 	}
 }
 
-void clear_line() {
-	int lines_to_clear[4] = { 0,0,0,0 };
+void clear_line(TYPE_GRID) {
+	int lines_to_clear[] = { 0,0,0,0,0,0,0 };
 	int lines_count = 0;
 
 	for (int y = LINES_HEIGHT - 1; y > 0; y--) {
@@ -63,29 +70,26 @@ void clear_line() {
 					// Found non zero line
 					lines_to_clear[lines_count] = y;
 					lines_count++;
+					LOGF("Found lines %d\n", y);
 				}
 			}
 		}
 	}
 
 	if (lines_count > 0) {
-		for (int y = lines_to_clear[0]; y >= 0; y--) {
+		int curr_line = lines_to_clear[0];
+		for (int y = LINES_HEIGHT - 1; y > 0; y--) {
 			for (int x = 0; x < LINES_WIDTH; x++) {
-				bool found = false;
-				for (int i = 0; i < lines_count; i++) {
-					if (lines_to_clear[i] == y) {
-						found = true;
-						break;
-					}
+				int next_y = y + (curr_line == y ? 1 : 0) + 1;
+				if (next_y <= LINES_HEIGHT) {
+					grid[next_y][x] = grid[y][x];
 				}
-				LOGF("FOUND %d %d %d\n", y, x, found);
-				grid[y + found + 1][x] = grid[y][x];
 			}
 		}
 	}
 }
 
-void draw_grid(SDL_Renderer* renderer) {
+void draw_grid(SDL_Renderer* renderer, TYPE_GRID) {
 	for (int y = 0; y <= LINES_HEIGHT; y++) {
 		for (int x = 0; x <= LINES_WIDTH; x++) {
 			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
