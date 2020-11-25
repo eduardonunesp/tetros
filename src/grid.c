@@ -26,14 +26,6 @@ void init_grid() {
 		{0,0,0,0,0,0,0,0,0,0,},
 		{0,0,0,0,0,0,0,0,0,0,},
 		{0,0,0,0,0,0,0,0,0,0,},
-		// {0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
-		// {0,-1,-1,-1,-1,-1,-1,0,-1,-1,},
-		// {0,-1,-1,-1,-1,-1,-1,0,-1,-1,},
-		// {0,-1,-1,-1,-1, 0,-2,-1,-1,-1,},
-		// {0,-1,-1,-1,-1,-2,-2,-2,-1,-1,},
-		// {0,-1,-1,-1,-1,-4,-4,0,-1,-1,},
-		// {0,-1,-1,-1,-1,-4,-4,0,-1,-1,},
-		// {0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
 	};
 
 	for (int y = 0; y < LINES_HEIGHT; y++) {
@@ -71,11 +63,6 @@ void clear_line() {
 					// Found non zero line
 					lines_to_clear[lines_count] = y;
 					lines_count++;
-
-					// Clear entire line
-					for (int xx = 0; xx < LINES_WIDTH; xx++) {
-						// grid[y][xx] = 0;
-					}
 				}
 			}
 		}
@@ -129,30 +116,28 @@ void draw_grid(SDL_Renderer* renderer) {
 
 				switch (piece)
 				{
-				case -1:
+				case TSTF:
 					color.r = 0;
 					color.g = 255;
 					color.b = 255;
 					break;
-				case -2:
-
+				case TETF:
 					color.r = 255;
 					color.g = 0;
 					color.b = 255;
 					break;
-				case -3:
-
+				case TSWF:
+				case TSWIF:
 					color.r = 255;
 					color.g = 0;
 					color.b = 0;
 					break;
-				case -4:
-
+				case TSQF:
 					color.r = 255;
 					color.g = 255;
 					color.b = 0;
 					break;
-				case -5:
+				case TELF:
 					color.r = 0;
 					color.g = 0;
 					color.b = 255;

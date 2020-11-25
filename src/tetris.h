@@ -25,17 +25,20 @@
 
 #define SPEED 1000
 
-#define TST 1
-#define TET 2
-#define TSW 3
-#define TSQ 4
-#define TEL 5
+#define N_TETROMINOS 6
+#define TST  1
+#define TET  2
+#define TSW  3
+#define TSWI 4
+#define TSQ  5
+#define TEL  6
 
-#define TSTF -1
-#define TETF -2
-#define TSWF -3
-#define TSQF -4
-#define TELF -5
+#define TSTF  -1
+#define TETF  -2
+#define TSWF  -3
+#define TSWIF -4
+#define TSQF  -5
+#define TELF  -6
 
 // straight tetromino
 #define TST0 {  \
@@ -94,6 +97,22 @@
 	{0, 0, 3, 0}, \
 	{0, 3, 3, 0}, \
 	{0, 3, 0, 0}, \
+	{0, 0, 0, 0}, \
+}
+
+// skew tetromino 2
+#define TSWI0 {  \
+	{0, 0, 3, 3}, \
+	{0, 3, 3, 0}, \
+	{0, 0, 0, 0}, \
+	{0, 0, 0, 0}, \
+}
+
+// skew tetromino 2
+#define TSWI1 {  \
+	{0, 3, 0, 0}, \
+	{0, 3, 3, 0}, \
+	{0, 0, 3, 0}, \
 	{0, 0, 0, 0}, \
 }
 

@@ -38,7 +38,7 @@ int main(int argc, char* argv[]) {
 		clear_line();
 
 		current_time = SDL_GetTicks();
-		if (current_time > last_time + accelerate) {
+		if (!curr_tetromino || (current_time > last_time + accelerate)) {
 			if (!curr_tetromino) {
 				curr_tetromino = create_tetromino(get_random_piece());
 			}

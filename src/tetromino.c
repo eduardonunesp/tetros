@@ -1,7 +1,7 @@
 #include "tetris.h"
 
 int get_random_piece() {
-	return rand() % (5);
+	return rand() % (N_TETROMINOS);
 }
 
 tetromino_t* create_tetromino(int tetromino_type) {
@@ -70,6 +70,27 @@ tetromino_t* create_tetromino(int tetromino_type) {
 		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TSW1;
 		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TSW0;
 		int p4[PIECE_AREA_X][PIECE_AREA_Y] = TSW1;
+
+		for (int y = 0; y < PIECE_AREA_X; y++) {
+			for (int x = 0; x < PIECE_AREA_X; x++) {
+				new_tetromino->piece[0][y][x] = p1[y][x];
+				new_tetromino->piece[1][y][x] = p2[y][x];
+				new_tetromino->piece[2][y][x] = p3[y][x];
+				new_tetromino->piece[3][y][x] = p4[y][x];
+			}
+		}
+	}
+	break;
+	case TSWI:
+	{
+		new_tetromino->color.r = 255;
+		new_tetromino->color.g = 0;
+		new_tetromino->color.b = 0;
+
+		int p1[PIECE_AREA_X][PIECE_AREA_Y] = TSWI0;
+		int p2[PIECE_AREA_X][PIECE_AREA_Y] = TSWI1;
+		int p3[PIECE_AREA_X][PIECE_AREA_Y] = TSWI0;
+		int p4[PIECE_AREA_X][PIECE_AREA_Y] = TSWI1;
 
 		for (int y = 0; y < PIECE_AREA_X; y++) {
 			for (int x = 0; x < PIECE_AREA_X; x++) {
@@ -155,10 +176,6 @@ void draw_tetromino(SDL_Renderer* renderer) {
 }
 
 void update_tetromino() {
-	if (curr_tetromino) {
-		curr_tetromino->y++;
-	}
-
 	if (curr_tetromino && curr_tetromino->pinned) {
 		for (int y = 0; y < PIECE_AREA_Y; y++) {
 			for (int x = 0; x < PIECE_AREA_X; x++) {
@@ -188,6 +205,10 @@ void update_tetromino() {
 				}
 			}
 		}
+	}
+
+	if (curr_tetromino) {
+		curr_tetromino->y++;
 	}
 }
 
