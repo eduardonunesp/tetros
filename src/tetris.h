@@ -23,7 +23,7 @@
 #define PIECE_VARIATIONS 4
 #define CELL_SIZE 24
 
-#define SPEED 1000
+#define SPEED 100
 
 #define TST 1
 #define TET 2

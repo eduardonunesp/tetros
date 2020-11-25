@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
 
 	init_grid();
 
-	curr_tetromino = create_tetromino(get_random_piece());
+	curr_tetromino = create_tetromino(TST);
 
 	LOG("Game start\n");
 

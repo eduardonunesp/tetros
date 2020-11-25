@@ -4,22 +4,44 @@
 
 void init_grid() {
 	int counter = 0;
+
+	int grid_ref[LINES_HEIGHT][LINES_WIDTH] = {
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		{0,0,0,0,0,0,0,0,0,0,},
+		// {0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+		// {0,-1,-1,-1,-1,-1,-1,0,-1,-1,},
+		// {0,-1,-1,-1,-1,-1,-1,0,-1,-1,},
+		// {0,-1,-1,-1,-1, 0,-2,-1,-1,-1,},
+		// {0,-1,-1,-1,-1,-2,-2,-2,-1,-1,},
+		// {0,-1,-1,-1,-1,-4,-4,0,-1,-1,},
+		// {0,-1,-1,-1,-1,-4,-4,0,-1,-1,},
+		// {0,-1,-1,-1,-1,-1,-1,-1,-1,-1,},
+	};
+
 	for (int y = 0; y < LINES_HEIGHT; y++) {
 		for (int x = 0; x < LINES_WIDTH; x++) {
-			grid[y][x] = 0;
+			grid[y][x] = grid_ref[y][x];
 			counter++;
 		}
 	}
-
-	// for (int x = 0; x < LINES_WIDTH; x++) {
-	// 	grid[19][x] = -1;
-	// 	grid[18][x] = -1;
-	// 	grid[17][x] = -1;
-	// }
-
-	// grid[19][0] = 0;
-	// grid[18][0] = 0;
-	// grid[17][0] = 0;
 
 	LOGF("Grid created with %d positions\n", counter);
 }
@@ -38,43 +60,39 @@ void print_grid() {
 }
 
 void clear_line() {
-	int lines_to_clear[4] = { 0, 0, 0, 0 };
+	int lines_to_clear[4] = { 0,0,0,0 };
 	int lines_count = 0;
-	bool should_clear = false;
 
-	for (int y = 0; y < LINES_HEIGHT; y++) {
-		bool has_line = true;
-
+	for (int y = LINES_HEIGHT - 1; y > 0; y--) {
+		int count = 0;
 		for (int x = 0; x < LINES_WIDTH; x++) {
-			if (grid[y][x] == 0) {
-				has_line = false;
-			}
-		}
+			if (grid[y][x] != 0) {
+				if (++count == LINES_WIDTH) {
+					// Found non zero line
+					lines_to_clear[lines_count] = y;
+					lines_count++;
 
-		if (has_line) {
-			lines_to_clear[lines_count] = y;
-			lines_count++;
-		}
-	}
-
-	for (int line_index = 0; line_index < lines_count; line_index++) {
-		if (lines_to_clear[line_index]) {
-			LOGF("Has line %d\n", line_index);
-			should_clear = true;
-
-			for (int x = 0; x < LINES_WIDTH; x++) {
-				grid[lines_to_clear[line_index]][x] = 0;
+					// Clear entire line
+					for (int xx = 0; xx < LINES_WIDTH; xx++) {
+						// grid[y][xx] = 0;
+					}
+				}
 			}
 		}
 	}
 
-	if (should_clear) {
-		int last_index = lines_to_clear[lines_count - 1];
-		LOGF("Last index %d\n", last_index);
-		for (int y = last_index - 1; y > 0; y--) {
+	if (lines_count > 0) {
+		for (int y = lines_to_clear[0]; y >= 0; y--) {
 			for (int x = 0; x < LINES_WIDTH; x++) {
-				LOGF("%d %d\n", y, x);
-				grid[y + lines_count][x] = grid[y][x];
+				bool found = false;
+				for (int i = 0; i < lines_count; i++) {
+					if (lines_to_clear[i] == y) {
+						found = true;
+						break;
+					}
+				}
+				LOGF("FOUND %d %d %d\n", y, x, found);
+				grid[y + found + 1][x] = grid[y][x];
 			}
 		}
 	}
