@@ -10,13 +10,6 @@ void parse_input(SDL_Event* event) {
 			accelerate = -1000;
 		}
 		break;
-		default:
-			break;
-		}
-		break;
-	case SDL_KEYUP:
-		switch (event->key.keysym.sym) {
-
 		case SDLK_UP:
 		{
 			if (curr_tetromino && can_rotate()) {
