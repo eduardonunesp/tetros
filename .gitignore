@@ -21,3 +21,6 @@ CTestTestfile.cmake
 _deps
 .vscode
 tetris
+app.html
+app.js
+app.wasm
