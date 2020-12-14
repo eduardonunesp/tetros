@@ -1,7 +1,7 @@
 #ifndef __SCENE_PLAY_H__
 #define __SCENE_PLAY_H__
 
-#include "SDL2/SDL.h"
+#include <SDL.h>
 
 typedef struct game game_t;
 

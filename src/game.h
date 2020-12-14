@@ -1,7 +1,7 @@
 #ifndef __GAME_H__
 #define __GAME_H__
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <stdbool.h>
 #include <time.h>
 #include "scenes/scene_menu.h"

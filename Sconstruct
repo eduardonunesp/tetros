@@ -2,7 +2,7 @@ from sys import platform
 
 IncludePath = [
   './',
-  '/usr/local/include',
+  '/usr/local/include/SDL2',
 ]
 
 LibsPath = []

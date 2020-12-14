@@ -24,3 +24,4 @@ bin
 app.html
 app.js
 app.wasm
+.idea
