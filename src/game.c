@@ -63,9 +63,6 @@ void handle_events(game_t* game) {
 		case GAME_SCENE_PLAY:
 			scene_play_handle_events(game, &event);
 			break;
-		default:
-
-			break;
 		}
 	}
 }
