@@ -20,6 +20,7 @@ if int(ARGUMENTS.get('debug', 0)):
 files = Split("""
   src/main.c
   src/game.c
+  src/state.c
 """);
 
 program = env.Program(target="bin/tetris", source=files)

@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <time.h>
+#include "state.h"
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -17,6 +18,7 @@ typedef struct game {
 	SDL_Window* win;
 	SDL_Renderer* renderer;
 	bool running;
+	state_t* state;
 } game_t;
 
 game_t* game_create();

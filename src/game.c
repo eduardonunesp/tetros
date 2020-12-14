@@ -11,6 +11,7 @@ game_t* game_create() {
 	new_game->running = false;
 	new_game->win = NULL;
 	new_game->renderer = NULL;
+	new_game->state = state_create();
 	LOG("Game created");
 	return new_game;
 }
