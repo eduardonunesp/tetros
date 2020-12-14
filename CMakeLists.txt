@@ -3,9 +3,23 @@ cmake_minimum_required(VERSION 3.10)
 project(Tetros VERSION 1.0)
 
 find_package(SDL2 REQUIRED)
+find_library(SDL_MIXER_LIBRARY
+  NAMES SDL2_mixer
+  HINTS
+    ENV SDLMIXERDIR
+    ENV SDLDIR
+  PATH_SUFFIXES lib
+)
+find_library(SDL_MIXER_LIBRARY
+  NAMES SDL2_image
+  HINTS
+    ENV SDLMIXERDIR
+    ENV SDLDIR
+  PATH_SUFFIXES lib
+)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-set(CMAKE_VERBOSE_MAKEFILE OFF)
+set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -g")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
