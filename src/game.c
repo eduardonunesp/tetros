@@ -78,10 +78,10 @@ void handle_rendering(game_t* game) {
 	case GAME_SCENE_NONE:
 		break;
 	case GAME_SCENE_MENU:
-		scene_menu_loop(game);
+		scene_menu_rendering(game);
 		break;
 	case GAME_SCENE_PLAY:
-		scene_play_loop(game);
+		scene_play_rendering(game);
 		break;
 	}
 

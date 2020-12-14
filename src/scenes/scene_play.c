@@ -9,7 +9,7 @@ scene_play_t* scene_play_create() {
 
 	ASSERT((new_scene == NULL), "Failed to create scene game play");
 
-	new_scene->grid = grid_create(20, 10, 0, 0);
+	new_scene->grid = grid_create(20, 10, 116, 60, 24);
 
 	LOG("Game play scene created");
 	return new_scene;
@@ -32,8 +32,29 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 	}
 }
 
-void scene_play_loop(game_t* game) {
+void scene_play_rendering(game_t* game) {
+	grid_t* grid = game->scene_play->grid;
+	SDL_Renderer* renderer = game->renderer;
 
+	for (int y = 0;y <= grid->rows; y++) {
+		for (int x = 0;x <= grid->cols; x++) {
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+			SDL_RenderDrawLine(renderer,
+				grid->pos_x + (x * grid->cell_size),
+				grid->pos_y,
+				grid->pos_x + (x * grid->cell_size),
+				grid->pos_y + (grid->rows * grid->cell_size)
+			);
+
+			SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+			SDL_RenderDrawLine(renderer,
+				grid->pos_x,
+				grid->pos_y + (y * grid->cell_size),
+				grid->pos_x + (grid->cols * grid->cell_size),
+				grid->pos_y + (y * grid->cell_size)
+			);
+		}
+	}
 }
 
 void scene_play_destroy(game_t* game) {
