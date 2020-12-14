@@ -1,4 +1,5 @@
 #include "scene_menu.h"
+#include "../game.h"
 #include "../log.h"
 #include "../utils.h"
 
@@ -12,14 +13,30 @@ scene_menu_t* scene_menu_create() {
 	return new_scene;
 }
 
-void scene_menu_init(scene_menu_t* scene_menu) {
+void scene_menu_init(game_t* game) {
+	LOG("Scene menu init");
+}
+
+void scene_menu_handle_events(game_t* game, SDL_Event* event) {
+	if (event->type == SDL_QUIT) {
+		game->running = false;
+	}
+
+	if (event->type == SDL_KEYUP) {
+		if (event->key.keysym.sym == SDLK_ESCAPE) {
+			game->running = false;
+		}
+
+		if (event->key.keysym.sym == SDLK_RETURN) {
+			game_set_scene(game, GAME_SCENE_PLAY);
+		}
+	}
+}
+
+void scene_menu_loop(game_t* game) {
 
 }
 
-void scene_menu_loop(scene_menu_t* scene_menu) {
-
-}
-
-void scene_menu_destroy(scene_menu_t* scene_menu) {
-
+void scene_menu_destroy(game_t* game) {
+	LOG("Scene menu destroy");
 }

@@ -11,13 +11,24 @@ game_t* game_create() {
 	new_game->running = false;
 	new_game->win = NULL;
 	new_game->renderer = NULL;
-	new_game->state = state_create();
 	new_game->scene_menu = scene_menu_create();
 	new_game->scene_play = scene_play_create();
 	new_game->last_time = 0;
 	new_game->current_time = 0;
+
+	game_set_scene(new_game, GAME_SCENE_MENU);
+
 	LOG("Game created");
 	return new_game;
+}
+
+void game_set_scene(game_t* game, game_scenes_e new_scene) {
+	ASSERT((game == NULL), "Invalid game structure on switch scene");
+
+	if (new_scene != game->active_scene) {
+		LOGF("Switch scene %d\n", new_scene);
+		game->active_scene = new_scene;
+	}
 }
 
 void game_init(game_t* game) {
@@ -33,40 +44,48 @@ void game_init(game_t* game) {
 
 	game->renderer = SDL_CreateRenderer(game->win, -1, SDL_RENDERER_ACCELERATED);
 	ASSERT((game->renderer == NULL), "Invalid renderer structure");
+
+	scene_menu_init(game);
+	scene_play_init(game);
+
 	LOG("Game initialized");
 }
 
 void handle_events(game_t* game) {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
-		if (event.type == SDL_QUIT) {
-			game->running = false;
-		}
+		switch (game->active_scene) {
+		case GAME_SCENE_NONE:
+			break;
+		case GAME_SCENE_MENU:
+			scene_menu_handle_events(game, &event);
+			break;
+		case GAME_SCENE_PLAY:
+			scene_play_handle_events(game, &event);
+			break;
+		default:
 
-		if (event.type == SDL_KEYDOWN) {
-			if (event.key.keysym.sym == SDLK_ESCAPE) {
-				game->running = false;
-			}
+			break;
 		}
 	}
 }
 
 void handle_tick_event(game_t* game) {
-	if (game->state->current_state > GAME_STATE_INIT) {
-
-	}
 }
 
 void handle_rendering(game_t* game) {
 	SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
 	SDL_RenderClear(game->renderer);
 
-	if (game->state->current_state == GAME_STATE_INIT) {
-		scene_menu_loop(game->scene_menu);
-	}
-
-	if (game->state->current_state > GAME_STATE_INIT) {
-		scene_play_loop(game->scene_play);
+	switch (game->active_scene) {
+	case GAME_SCENE_NONE:
+		break;
+	case GAME_SCENE_MENU:
+		scene_menu_loop(game);
+		break;
+	case GAME_SCENE_PLAY:
+		scene_play_loop(game);
+		break;
 	}
 
 	SDL_RenderPresent(game->renderer);
@@ -99,8 +118,6 @@ void game_destroy(game_t* game) {
 	SDL_DestroyWindow(game->win);
 	SDL_Quit();
 
-	free(game->state);
-	game->state = NULL;
 	free(game->scene_menu);
 	game->scene_menu = NULL;
 	free(game->scene_play);

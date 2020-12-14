@@ -1,4 +1,5 @@
 #include "scene_play.h"
+#include "../game.h"
 #include "../log.h"
 #include "../utils.h"
 
@@ -12,14 +13,26 @@ scene_play_t* scene_play_create() {
 	return new_scene;
 }
 
-void scene_play_init(scene_play_t* scene_play) {
+void scene_play_init(game_t* game) {
+	LOG("Scene play init");
+}
+
+void scene_play_handle_events(game_t* game, SDL_Event* event) {
+	if (event->type == SDL_QUIT) {
+		game->running = false;
+	}
+
+	if (event->type == SDL_KEYDOWN) {
+		if (event->key.keysym.sym == SDLK_ESCAPE) {
+			game->running = false;
+		}
+	}
+}
+
+void scene_play_loop(game_t* game) {
 
 }
 
-void scene_play_loop(scene_play_t* scene_play) {
-
-}
-
-void scene_play_destroy(scene_play_t* scene_play) {
-
+void scene_play_destroy(game_t* game) {
+	LOG("Scene play destroy");
 }
