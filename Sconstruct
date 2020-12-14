@@ -1,12 +1,12 @@
 from sys import platform
 
 IncludePath = [
-    './', 
-    '/usr/local/include',
+  './',
+  '/usr/local/include',
 ]
-LibsPath = [
-    '/usr/local/opt/zlib/lib'
-]   
+
+LibsPath = []
+
 Libs = ['SDL2', 'SDL2_mixer', 'SDL2_image']
 CommonFlags = ['-Wall']
 Defines = []
@@ -14,15 +14,13 @@ Defines = []
 env = Environment(CPPPATH=IncludePath, CCFLAGS=CommonFlags, LIBS=Libs, LIBPATH=LibsPath, CPPDEFINES=Defines)
 
 if int(ARGUMENTS.get('debug', 0)):
-  print(" --- COMPILING WITH DEBUG MODE ---")
   env.Append(CPPDEFINES = '_DEBUG')
   env.Append(CCFLAGS = '-g')
 
 files = Split("""
   src/main.c
-  src/grid.c
-  src/tetromino.c
+  src/game.c
 """);
 
-program = env.Program(target="tetris", source=files)
+program = env.Program(target="bin/tetris", source=files)
 env.Default(program)

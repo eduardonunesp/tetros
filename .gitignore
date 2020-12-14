@@ -20,7 +20,7 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 .vscode
-tetris
+bin
 app.html
 app.js
 app.wasm
