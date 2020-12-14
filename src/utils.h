@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include "log.h"
 
+#define TIME_SECOND 1000
 
 #define EXIT_ERR() exit(1)
 #define EXIT_OK() exit(0)
