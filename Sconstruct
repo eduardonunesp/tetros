@@ -22,6 +22,7 @@ files = Split("""
   src/game.c
   src/scenes/scene_menu.c
   src/scenes/scene_play.c
+  src/scenes/grid.c
 """);
 
 program = env.Program(target="bin/tetros", source=files)

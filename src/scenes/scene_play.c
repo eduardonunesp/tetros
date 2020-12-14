@@ -9,12 +9,15 @@ scene_play_t* scene_play_create() {
 
 	ASSERT((new_scene == NULL), "Failed to create scene game play");
 
+	new_scene->grid = grid_create(20, 10, 0, 0);
+
 	LOG("Game play scene created");
 	return new_scene;
 }
 
 void scene_play_init(game_t* game) {
 	LOG("Scene play init");
+	grid_print(game->scene_play->grid);
 }
 
 void scene_play_handle_events(game_t* game, SDL_Event* event) {
