@@ -4,14 +4,25 @@
 #include <SDL.h>
 #include <stdbool.h>
 
-#define TETRO_TYPES 6
+#define TETRO_TYPES 7
 #define TETRO_VARIATIONS 4
 #define TETRO_SQR_AREA 4
 #define GRID_DEBUG_COLOR 255, 255, 255, 255
 
+static SDL_Color TETRO_COLORS[TETRO_TYPES] = {
+	{0,   0,   0,   255},
+	{0,   255, 255, 255},
+	{255, 0,   255, 255},
+	{255, 0,   0,   255},
+	{255, 0,   0,   255},
+	{255, 255, 0,   255},
+	{0,   0,   255, 255},
+};
+
 typedef struct grid grid_t;
 
 typedef enum {
+	TETRO_NONE,
 	TETRO_STRAIGHT,
 	TETRO_TEE,
 	TETRO_SKEW_LEFT,

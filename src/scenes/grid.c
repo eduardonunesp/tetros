@@ -21,13 +21,14 @@ grid_t* grid_create(int rows, int cols, int pos_x, int pos_y, int cell_size) {
 		data[i] = malloc(cols * sizeof(data[0]));
 	}
 
-	for (int i = 0;i < rows;i++) {
-		for (int j = 0;j < cols;j++) {
-			data[i][j] = 0;
+	for (int y = 0;y < rows;y++) {
+		for (int x = 0;x < cols;x++) {
+			data[y][x] = 0;
 		}
 	}
 
 	new_grid->data = data;
+	new_grid->pin_event_id = SDL_RegisterEvents(1000);
 
 	LOG("Grid created");
 	return new_grid;

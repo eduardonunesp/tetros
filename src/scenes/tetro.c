@@ -3,17 +3,8 @@
 #include "../utils.h"
 #include "grid.h"
 
-
-SDL_Color TETRO_COLORS[TETRO_TYPES] = {
-	{0,   255, 255, 255},
-	{255, 0,   255, 255},
-	{255, 0,   0,   255},
-	{255, 0,   0,   255},
-	{255, 255, 0,   255},
-	{0,   0,   255, 255},
-};
-
 int TETRO_DATA[TETRO_TYPES][TETRO_VARIATIONS][TETRO_SQR_AREA][TETRO_SQR_AREA] = {
+	{},
 	// straight tetro
 	{
 		{
@@ -223,7 +214,45 @@ void tetro_print(tetro_t* tetro) {
 	}
 }
 
+void warn_about_tetro_state(tetro_t* tetro, int event_code) {
+	LOGF("Dispatch event %d\n", event_code);
+	SDL_Event event;
+	SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+	event.type = event_code;
+	event.user.code = event_code;
+	SDL_PushEvent(&event);
+}
+
 void tetro_update_fall(tetro_t* tetro, grid_t* grid) {
+	if (tetro->is_pinned) {
+		for (int y = 0;y < TETRO_SQR_AREA;y++) {
+			for (int x = 0;x < TETRO_SQR_AREA;x++) {
+				if (tetro->data[tetro->curr_variation][y][x] != 0) {
+					grid->data[tetro->grid_y + y][tetro->grid_x + x] = tetro->tetro_type * -1;
+				}
+			}
+		}
+
+		warn_about_tetro_state(tetro, grid->pin_event_id);
+		return;
+	}
+
+	for (int y = 0;y < TETRO_SQR_AREA;y++) {
+		for (int x = 0;x < TETRO_SQR_AREA;x++) {
+			if (tetro->data[tetro->curr_variation][y][x] != 0) {
+				if (tetro->grid_y + y + 1 >= grid->rows) {
+					tetro->is_pinned = true;
+					return;
+				}
+
+				if (grid->data[tetro->grid_y + y + 1][tetro->grid_x + x] != 0) {
+					tetro->is_pinned = true;
+					return;
+				}
+			}
+		}
+	}
+
 	tetro->grid_y++;
 }
 

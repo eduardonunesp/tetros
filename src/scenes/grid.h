@@ -8,6 +8,7 @@ typedef struct grid {
 	int rows, cols;
 	int pos_x, pos_y;
 	int cell_size;
+	int pin_event_id;
 	int** data;
 } grid_t;
 
