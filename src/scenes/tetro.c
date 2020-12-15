@@ -1,6 +1,7 @@
 #include "tetro.h"
 #include "../log.h"
 #include "../utils.h"
+#include "grid.h"
 
 
 SDL_Color TETRO_COLORS[TETRO_TYPES] = {
@@ -219,5 +220,63 @@ void tetro_print(tetro_t* tetro) {
 			LOG("\n");
 		}
 		LOG("\n");
+	}
+}
+
+void tetro_update_fall(tetro_t* tetro, grid_t* grid) {
+	tetro->grid_y++;
+}
+
+bool can_move_right(tetro_t* tetro, grid_t* grid) {
+	if (tetro->is_pinned) {
+		return false;
+	}
+
+	for (int y = 0;y < TETRO_SQR_AREA;y++) {
+		for (int x = 0;x < TETRO_SQR_AREA;x++) {
+			if (tetro->data[tetro->curr_variation][y][x] != 0) {
+				if (tetro->grid_x + x + 1 >= grid->cols) {
+					return false;
+				}
+
+				if (grid->data[tetro->grid_y + y][tetro->grid_x + x + 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+bool can_move_left(tetro_t* tetro, grid_t* grid) {
+	if (tetro->is_pinned) {
+		return false;
+	}
+
+	for (int y = 0;y < TETRO_SQR_AREA;y++) {
+		for (int x = 0;x < TETRO_SQR_AREA;x++) {
+			if (tetro->data[tetro->curr_variation][y][x] != 0) {
+				if (tetro->grid_x + x - 1 < 0) {
+					return false;
+				}
+
+				if (grid->data[tetro->grid_y + y][tetro->grid_x + x - 1] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+void tetro_move_sideways(tetro_t* tetro, tetro_move_e tetro_move, grid_t* grid) {
+	if (tetro_move == TETRO_MOVE_LEFT && can_move_left(tetro, grid)) {
+		tetro->grid_x--;
+	}
+
+	if (tetro_move == TETRO_MOVE_RIGHT && can_move_right(tetro, grid)) {
+		tetro->grid_x++;
 	}
 }

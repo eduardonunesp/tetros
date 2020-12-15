@@ -35,6 +35,16 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 		game->running = false;
 	}
 
+	if (event->type == SDL_KEYDOWN) {
+		if (event->key.keysym.sym == SDLK_RIGHT) {
+			tetro_move_sideways(game->scene_play->curr_tetro, TETRO_MOVE_RIGHT, game->scene_play->grid);
+		}
+
+		if (event->key.keysym.sym == SDLK_LEFT) {
+			tetro_move_sideways(game->scene_play->curr_tetro, TETRO_MOVE_LEFT, game->scene_play->grid);
+		}
+	}
+
 	if (event->type == SDL_KEYUP) {
 		if (event->key.keysym.sym == SDLK_ESCAPE) {
 			LOG("Escape button pressed");
@@ -121,7 +131,9 @@ void draw_tetro(game_t* game) {
 }
 
 void handle_tick_update(game_t* game) {
-	LOG("TICK");
+	if (game->scene_play->curr_tetro) {
+		tetro_update_fall(game->scene_play->curr_tetro, game->scene_play->grid);
+	}
 }
 
 void scene_play_handle_update(game_t* game) {

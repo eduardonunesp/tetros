@@ -14,7 +14,7 @@ game_t* game_create() {
 	new_game->scene_menu = scene_menu_create();
 	new_game->scene_play = scene_play_create();
 
-	game_set_scene(new_game, GAME_SCENE_MENU);
+	game_set_scene(new_game, GAME_SCENE_PLAY);
 
 	LOG("Game created");
 	return new_game;

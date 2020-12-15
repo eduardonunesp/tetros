@@ -9,6 +9,8 @@
 #define TETRO_SQR_AREA 4
 #define GRID_DEBUG_COLOR 255, 255, 255, 255
 
+typedef struct grid grid_t;
+
 typedef enum {
 	TETRO_STRAIGHT,
 	TETRO_TEE,
@@ -17,6 +19,11 @@ typedef enum {
 	TETRO_SQUARE,
 	TETRO_EL,
 } tetro_type_e;
+
+typedef enum {
+	TETRO_MOVE_LEFT,
+	TETRO_MOVE_RIGHT,
+} tetro_move_e;
 
 typedef struct tetro {
 	tetro_type_e tetro_type;
@@ -29,5 +36,7 @@ typedef struct tetro {
 
 tetro_t* tetro_create(tetro_type_e tetro_type);
 void tetro_print(tetro_t* tetro);
+void tetro_update_fall(tetro_t* tetro, grid_t* grid);
+void tetro_move_sideways(tetro_t* tetro, tetro_move_e tetro_move, grid_t* grid);
 
 #endif // __TETRO_H__
