@@ -280,3 +280,65 @@ void tetro_move_sideways(tetro_t* tetro, tetro_move_e tetro_move, grid_t* grid) 
 		tetro->grid_x++;
 	}
 }
+
+bool can_rotate(tetro_t* tetro, tetro_rotate_e tetro_rotate, grid_t* grid) {
+	if (tetro->is_pinned) {
+		return false;
+	}
+
+	int next_variation = tetro->curr_variation;
+
+	if (tetro_rotate == TETRO_ROTATE_CCW) {
+		next_variation++;
+		if (next_variation >= TETRO_VARIATIONS) {
+			next_variation = 0;
+		}
+	}
+
+	if (tetro_rotate == TETRO_ROTATE_CW) {
+		next_variation--;
+		if (next_variation < 0) {
+			next_variation = 3;
+		}
+	}
+
+	for (int y = 0;y < TETRO_SQR_AREA;y++) {
+		for (int x = 0;x < TETRO_SQR_AREA;x++) {
+			if (tetro->data[next_variation][y][x] != 0) {
+				if (tetro->grid_y + y >= grid->rows) {
+					return false;
+				}
+
+				if (tetro->grid_x + x >= grid->cols) {
+					return false;
+				}
+
+				if (tetro->grid_x + x < 0) {
+					return false;
+				}
+
+				if (grid->data[tetro->grid_y + y][tetro->grid_x + x] != 0) {
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
+}
+
+void tetro_rotate(tetro_t* tetro, tetro_rotate_e tetro_rotate, grid_t* grid) {
+	if (tetro_rotate == TETRO_ROTATE_CCW && can_rotate(tetro, tetro_rotate, grid)) {
+		tetro->curr_variation++;
+		if (tetro->curr_variation >= TETRO_VARIATIONS) {
+			tetro->curr_variation = 0;
+		}
+	}
+
+	if (tetro_rotate == TETRO_ROTATE_CW && can_rotate(tetro, tetro_rotate, grid)) {
+		tetro->curr_variation--;
+		if (tetro->curr_variation < 0) {
+			tetro->curr_variation = 3;
+		}
+	}
+}

@@ -36,12 +36,20 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 	}
 
 	if (event->type == SDL_KEYDOWN) {
-		if (event->key.keysym.sym == SDLK_RIGHT) {
+		if (event->key.keysym.sym == SDLK_RIGHT && game->scene_play->curr_tetro) {
 			tetro_move_sideways(game->scene_play->curr_tetro, TETRO_MOVE_RIGHT, game->scene_play->grid);
 		}
 
-		if (event->key.keysym.sym == SDLK_LEFT) {
+		if (event->key.keysym.sym == SDLK_LEFT && game->scene_play->curr_tetro) {
 			tetro_move_sideways(game->scene_play->curr_tetro, TETRO_MOVE_LEFT, game->scene_play->grid);
+		}
+
+		if (event->key.keysym.sym == SDLK_COMMA && game->scene_play->curr_tetro) {
+			tetro_rotate(game->scene_play->curr_tetro, TETRO_ROTATE_CCW, game->scene_play->grid);
+		}
+
+		if (event->key.keysym.sym == SDLK_PERIOD && game->scene_play->curr_tetro) {
+			tetro_rotate(game->scene_play->curr_tetro, TETRO_ROTATE_CW, game->scene_play->grid);
 		}
 	}
 

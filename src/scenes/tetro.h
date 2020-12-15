@@ -25,6 +25,11 @@ typedef enum {
 	TETRO_MOVE_RIGHT,
 } tetro_move_e;
 
+typedef enum {
+	TETRO_ROTATE_CW,
+	TETRO_ROTATE_CCW,
+} tetro_rotate_e;
+
 typedef struct tetro {
 	tetro_type_e tetro_type;
 	SDL_Color color;
@@ -37,6 +42,7 @@ typedef struct tetro {
 tetro_t* tetro_create(tetro_type_e tetro_type);
 void tetro_print(tetro_t* tetro);
 void tetro_update_fall(tetro_t* tetro, grid_t* grid);
+void tetro_rotate(tetro_t* tetro, tetro_rotate_e tetro_rotate, grid_t* grid);
 void tetro_move_sideways(tetro_t* tetro, tetro_move_e tetro_move, grid_t* grid);
 
 #endif // __TETRO_H__
