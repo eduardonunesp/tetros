@@ -9,7 +9,11 @@ scene_play_t* scene_play_create() {
 
 	ASSERT((new_scene == NULL), "Failed to create scene game play");
 
-	new_scene->grid = grid_create(20, 10, 116, 60, 24);
+	new_scene->grid = grid_create(
+		GRID_ROWS, GRID_COLS,
+		GRID_POSX, GRID_POSY,
+		CELL_SIZE
+	);
 
 	LOG("Game play scene created");
 	return new_scene;
@@ -25,9 +29,14 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 		game->running = false;
 	}
 
-	if (event->type == SDL_KEYDOWN) {
+	if (event->type == SDL_KEYUP) {
 		if (event->key.keysym.sym == SDLK_ESCAPE) {
 			game->running = false;
+		}
+
+		if (event->key.keysym.sym == SDLK_t) {
+			tetro_t* t = tetro_create(TETRO_STRAIGHT);
+			tetro_print(t);
 		}
 	}
 }

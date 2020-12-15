@@ -3,11 +3,19 @@
 
 #include <SDL.h>
 #include "grid.h"
+#include "tetro.h"
+
+#define GRID_ROWS 20
+#define GRID_COLS 10
+#define GRID_POSX 116
+#define GRID_POSY 60
+#define CELL_SIZE 24
 
 typedef struct game game_t;
 
 typedef struct scene_play {
 	grid_t* grid;
+	tetro_t* curr_tetro;
 } scene_play_t;
 
 scene_play_t* scene_play_create();
