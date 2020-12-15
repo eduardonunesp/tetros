@@ -7,6 +7,7 @@
 #define TETRO_TYPES 6
 #define TETRO_VARIATIONS 4
 #define TETRO_SQR_AREA 4
+#define GRID_DEBUG_COLOR 255, 255, 255, 255
 
 typedef enum {
 	TETRO_STRAIGHT,

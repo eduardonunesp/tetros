@@ -13,8 +13,6 @@ game_t* game_create() {
 	new_game->renderer = NULL;
 	new_game->scene_menu = scene_menu_create();
 	new_game->scene_play = scene_play_create();
-	new_game->last_time = 0;
-	new_game->current_time = 0;
 
 	game_set_scene(new_game, GAME_SCENE_MENU);
 
@@ -67,7 +65,17 @@ void handle_events(game_t* game) {
 	}
 }
 
-void handle_tick_event(game_t* game) {
+void handle_update(game_t* game) {
+	switch (game->active_scene) {
+	case GAME_SCENE_NONE:
+		break;
+	case GAME_SCENE_MENU:
+		scene_menu_handle_update(game);
+		break;
+	case GAME_SCENE_PLAY:
+		scene_play_handle_update(game);
+		break;
+	}
 }
 
 void handle_rendering(game_t* game) {
@@ -93,17 +101,10 @@ void game_loop(game_t* game) {
 	ASSERT((game == NULL), "Invalid game structure on loop");
 
 	game->running = true;
-	game->current_time = SDL_GetTicks();
 
 	while (game->running) {
 		handle_events(game);
-
-		game->current_time = SDL_GetTicks();
-		if (game->current_time > game->last_time + TIME_SECOND) {
-			handle_tick_event(game);
-			game->last_time = game->current_time;
-		}
-
+		handle_update(game);
 		handle_rendering(game);
 	}
 }

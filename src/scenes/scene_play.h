@@ -16,11 +16,14 @@ typedef struct game game_t;
 typedef struct scene_play {
 	grid_t* grid;
 	tetro_t* curr_tetro;
+	unsigned int last_time;
+	unsigned int current_time;
 } scene_play_t;
 
 scene_play_t* scene_play_create();
 void scene_play_init(game_t* game);
 void scene_play_handle_events(game_t* game, SDL_Event* event);
+void scene_play_handle_update(game_t* game);
 void scene_play_rendering(game_t* game);
 void scene_play_destroy(game_t* game);
 

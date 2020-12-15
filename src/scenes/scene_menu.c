@@ -33,6 +33,10 @@ void scene_menu_handle_events(game_t* game, SDL_Event* event) {
 	}
 }
 
+void scene_menu_handle_update(game_t* game) {
+
+}
+
 void scene_menu_rendering(game_t* game) {
 
 }

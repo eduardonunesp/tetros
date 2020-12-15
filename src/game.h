@@ -25,8 +25,6 @@ typedef struct game {
 	SDL_Window* win;
 	SDL_Renderer* renderer;
 	bool running;
-	unsigned int last_time;
-	unsigned int current_time;
 	game_scenes_e active_scene;
 	scene_menu_t* scene_menu;
 	scene_play_t* scene_play;
