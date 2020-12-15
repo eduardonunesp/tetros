@@ -28,7 +28,6 @@ grid_t* grid_create(int rows, int cols, int pos_x, int pos_y, int cell_size) {
 	}
 
 	new_grid->data = data;
-	new_grid->pin_event_id = SDL_RegisterEvents(1000);
 
 	LOG("Grid created");
 	return new_grid;

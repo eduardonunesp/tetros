@@ -1,6 +1,7 @@
 #include "tetro.h"
 #include "../log.h"
 #include "../utils.h"
+#include "../game.h"
 #include "grid.h"
 
 int TETRO_DATA[TETRO_TYPES][TETRO_VARIATIONS][TETRO_SQR_AREA][TETRO_SQR_AREA] = {
@@ -223,7 +224,7 @@ void warn_about_tetro_state(tetro_t* tetro, int event_code) {
 	SDL_PushEvent(&event);
 }
 
-void tetro_update_fall(tetro_t* tetro, grid_t* grid) {
+void tetro_update_fall(tetro_t* tetro, grid_t* grid, game_t* game) {
 	if (tetro->is_pinned) {
 		for (int y = 0;y < TETRO_SQR_AREA;y++) {
 			for (int x = 0;x < TETRO_SQR_AREA;x++) {
@@ -233,7 +234,7 @@ void tetro_update_fall(tetro_t* tetro, grid_t* grid) {
 			}
 		}
 
-		warn_about_tetro_state(tetro, grid->pin_event_id);
+		warn_about_tetro_state(tetro, game->scene_play->play_events.EVENT_TETRO_PINNED);
 		return;
 	}
 

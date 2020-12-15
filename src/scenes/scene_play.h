@@ -13,11 +13,16 @@
 
 typedef struct game game_t;
 
+typedef struct play_events_t {
+	int EVENT_TETRO_PINNED;
+} play_events_t;
+
 typedef struct scene_play {
 	grid_t* grid;
 	tetro_t* curr_tetro;
 	unsigned int last_time;
 	unsigned int current_time;
+	play_events_t play_events;
 } scene_play_t;
 
 scene_play_t* scene_play_create();

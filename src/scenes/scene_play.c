@@ -15,9 +15,14 @@ scene_play_t* scene_play_create() {
 		CELL_SIZE
 	);
 
+	play_events_t events = {
+		SDL_RegisterEvents(1000),
+	};
+
 	new_scene->curr_tetro = NULL;
 	new_scene->last_time = 0;
 	new_scene->current_time = 0;
+	new_scene->play_events = events;
 
 	LOG("Game play scene created");
 	return new_scene;
@@ -37,7 +42,7 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 
 	if (event->type == SDL_USEREVENT) {
 		LOGF("User event arrived %d\n", event->type);
-		if (event->type == game->scene_play->grid->pin_event_id) {
+		if (event->type == game->scene_play->play_events.EVENT_TETRO_PINNED) {
 			free(game->scene_play->curr_tetro);
 			game->scene_play->curr_tetro = NULL;
 		}
@@ -93,8 +98,8 @@ void scene_play_handle_events(game_t* game, SDL_Event* event) {
 				}
 			}
 		}
-	}
 #endif
+	}
 }
 
 void render_grid(game_t* game) {
@@ -172,7 +177,7 @@ void draw_tetro(game_t* game) {
 
 void handle_tick_update(game_t* game) {
 	if (game->scene_play->curr_tetro) {
-		tetro_update_fall(game->scene_play->curr_tetro, game->scene_play->grid);
+		tetro_update_fall(game->scene_play->curr_tetro, game->scene_play->grid, game);
 	}
 }
 

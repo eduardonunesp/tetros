@@ -20,6 +20,7 @@ static SDL_Color TETRO_COLORS[TETRO_TYPES] = {
 };
 
 typedef struct grid grid_t;
+typedef struct game game_t;
 
 typedef enum {
 	TETRO_NONE,
@@ -52,7 +53,7 @@ typedef struct tetro {
 
 tetro_t* tetro_create(tetro_type_e tetro_type);
 void tetro_print(tetro_t* tetro);
-void tetro_update_fall(tetro_t* tetro, grid_t* grid);
+void tetro_update_fall(tetro_t* tetro, grid_t* grid, game_t* game);
 void tetro_rotate(tetro_t* tetro, tetro_rotate_e tetro_rotate, grid_t* grid);
 void tetro_move_sideways(tetro_t* tetro, tetro_move_e tetro_move, grid_t* grid);
 
