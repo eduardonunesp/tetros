@@ -34,6 +34,17 @@ void scene_play_init(game_t* game) {
 	game->scene_play->current_time = SDL_GetTicks();
 }
 
+void scene_play_dispatch_event(int event_code, void* data1, void* data2) {
+	LOGF("Dispatch event %d\n", event_code);
+	SDL_Event event;
+	SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
+	event.type = event_code;
+	event.user.code = event_code;
+	event.user.data1 = data1;
+	event.user.data2 = data2;
+	SDL_PushEvent(&event);
+}
+
 void scene_play_handle_events(game_t* game, SDL_Event* event) {
 	if (event->type == SDL_QUIT) {
 		LOG("Close window pressed");

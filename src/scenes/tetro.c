@@ -215,15 +215,6 @@ void tetro_print(tetro_t* tetro) {
 	}
 }
 
-void warn_about_tetro_state(tetro_t* tetro, int event_code) {
-	LOGF("Dispatch event %d\n", event_code);
-	SDL_Event event;
-	SDL_memset(&event, 0, sizeof(event)); /* or SDL_zero(event) */
-	event.type = event_code;
-	event.user.code = event_code;
-	SDL_PushEvent(&event);
-}
-
 void tetro_update_fall(tetro_t* tetro, grid_t* grid, game_t* game) {
 	if (tetro->is_pinned) {
 		for (int y = 0;y < TETRO_SQR_AREA;y++) {
@@ -234,7 +225,12 @@ void tetro_update_fall(tetro_t* tetro, grid_t* grid, game_t* game) {
 			}
 		}
 
-		warn_about_tetro_state(tetro, game->scene_play->play_events.EVENT_TETRO_PINNED);
+		scene_play_dispatch_event(
+			game->scene_play->play_events.EVENT_TETRO_PINNED,
+			NULL,
+			NULL
+		);
+
 		return;
 	}
 

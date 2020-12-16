@@ -15,8 +15,8 @@ grid_t* grid_create(int rows, int cols, int pos_x, int pos_y, int cell_size) {
 	new_grid->pos_y = pos_y;
 	new_grid->cell_size = cell_size;
 
-	int** data;
-	data = malloc(rows * sizeof(*data));
+	int** data = malloc(rows * sizeof(*data));
+
 	for (int i = 0; i < rows; i++) {
 		data[i] = malloc(cols * sizeof(data[0]));
 	}

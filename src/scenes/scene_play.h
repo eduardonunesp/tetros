@@ -27,6 +27,7 @@ typedef struct scene_play {
 
 scene_play_t* scene_play_create();
 void scene_play_init(game_t* game);
+void scene_play_dispatch_event(int event_code, void* data1, void* data2);
 void scene_play_handle_events(game_t* game, SDL_Event* event);
 void scene_play_handle_update(game_t* game);
 void scene_play_rendering(game_t* game);
