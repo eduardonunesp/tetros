@@ -33,10 +33,10 @@ SDL_FreeSurface(tmp_surface_##NAME);
 
 #ifdef __EMSCRIPTEN__
 #define TTF_ASSET_LOAD(NAME) \
-char *f_##NAME = "resources/images/"#NAME".png"; \
+char *f_##NAME = "resources/fonts/"#NAME".ttf"; \
 LOGF("Load file %s\n", f_##NAME); \
-TTF_Font* tmp_font_##NAME = TTF_OpenFont(f_##NAME); \
-ASSERT((tmp_font_##NAME == NULL), "Failed to load resource (null surface)");
+TTF_Font* loaded_##NAME = TTF_OpenFont(f_##NAME, 42); \
+ASSERT((loaded_##NAME == NULL), "Failed to load resource (null surface)");
 #else
 #define TTF_ASSET_LOAD(NAME) \
 SDL_RWops* rw_##NAME = SDL_RWFromConstMem(NAME, sizeof(NAME)); \
